@@ -119,17 +119,9 @@ end
 
 -- normalizeAddonName
 -- Util: Attempts to normalize addon names for comparison
-function AndyUtil.normalizeAddonName(num, numDecimalPlaces)
+function AndyUtil.normalizeAddonName(name)
   if not name then return "" end
   return string.lower(string.gsub(name, "^%s*(.-)%s*$", "%1"))
-end
-
--- getInstalledAddons
--- TODO: Attemps to fetch list of current installed addons
-function AndyUtil.getInstalledAddons()
-  local addons = {}
-  
-  return addons
 end
 
 -- runPeriodicEvents()

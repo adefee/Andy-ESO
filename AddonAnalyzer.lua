@@ -87,7 +87,7 @@ function Andy.RuntimeOnLoad()
     > Auto scans
   ]]
   AndyUtil.runPeriodicEvents('scan', {
-    joke = function() Andy.getInstalledAddons() end
+    joke = function() Andy.quickScanAllAddons() end
   })
 
   --[[
@@ -156,28 +156,3 @@ function Andy.OnAddonLoaded(event, addonName)
 end
 
 EVENT_MANAGER:RegisterForEvent(Andy.name, EVENT_ADD_ON_LOADED, Andy.OnAddonLoaded) -- Press Start.
-
-
--- Check if a specific addon is in the bad addons database
-function Andy.CheckAddon(name, version)
-    local normalizedName = NormalizeAddonName(name)
-    
-    for badAddonName, info in pairs(Andy.BadAddonsDB) do
-        local normalizedBadName = NormalizeAddonName(badAddonName)
-        
-        if normalizedName == normalizedBadName then
-            -- Check if all versions are bad or if this specific version is bad
-            if info.allVersions then
-                return true, info
-            elseif info.versions and version then
-                for _, badVersion in ipairs(info.versions) do
-                    if version == badVersion then
-                        return true, info
-                    end
-                end
-            end
-        end
-    end
-    
-    return false, nil
-end

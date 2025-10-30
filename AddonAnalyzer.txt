@@ -12,11 +12,11 @@ variables.lua
 ## Addons to Flag
 AddonWatchlist.lua
 
-## Core
-AddonAnalyzer-Scan.lua
-
 ## Utilities
 AddonAnalyzer-Util.lua
+
+## Core
+AddonAnalyzer-Scan.lua
 
 ## Init ANDY
 AddonAnalyzer.lua
