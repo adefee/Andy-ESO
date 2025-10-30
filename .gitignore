@@ -1,0 +1,18 @@
+# ESO SavedVariables (these are user-specific)
+SavedVariables/
+
+# Backup files
+*.bak
+*.backup
+
+# OS files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Editor files
+.vscode/
+.idea/
+*.sublime-*
+
+node_modules/

@@ -1,0 +1,25 @@
+## Title: ANDY - Addon Analyzer
+## Author: Lent (IGN @CallMeLent)
+## Version: 1.0.0
+## APIVersion: 101048
+## SavedVariables: AndySavedVars
+## Description: Analyzes installed addons against a database of known malicious, stolen, or community-reported bad addons.
+## SavedVariables: AddonAnalyzer_SavedVars
+
+## Variables
+variables.lua
+
+## Addons to Flag
+AddonWatchlist.lua
+
+## Core
+AddonAnalyzer-Scan.lua
+
+## Utilities
+AddonAnalyzer-Util.lua
+
+## Init ANDY
+AddonAnalyzer.lua
+
+## LICENSE
+; See LICENSE in this addon directory.
