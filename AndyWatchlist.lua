@@ -30,7 +30,7 @@ Andy.AddonWatchlistDb = {
         allVersions = true, -- If true, all versions are bad
         platform = "console",
         reportedDate = "2025-10-27"
-    },
+    }
     -- ["StolenContentAddon"] = {
     --     reason = "stolen",
     --     description = "Stolen from OriginalAddon by OriginalAuthor",

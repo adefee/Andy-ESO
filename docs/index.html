@@ -503,7 +503,8 @@
                               "description": "This addon has a denylist that silently blocks some players' messages, market postings, etc.",
                               "allVersions": true,
                               "platform": "console",
-                              "reportedDate": "2025-10-27"
+                              "reportedDate": "2025-10-27",
+                              "author": "TheStylishIrish"
                     }
           },
           "authors": {
@@ -580,7 +581,7 @@
                 
                 const platform = item.platform || 'both';
                 const platformDisplay = platform === 'both' ? 'PC & Console' : 
-                                       platform === 'pc' ? 'PC Only' : 'Console Only';
+                                       platform === 'pc' ? 'PC' : 'Console';
                 
                 const versions = item.allVersions ? 'All versions' : 
                                 item.versions ? item.versions.join(', ') : 'N/A';
@@ -600,7 +601,7 @@
                         ${item.author ? `
                         <div class="meta-item">
                             <span>👤</span>
-                            <span>Author: ${item.author}</span>
+                            <span>Author: @${item.author}</span>
                         </div>
                         ` : ''}
                         <div class="meta-item">

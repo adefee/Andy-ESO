@@ -18,7 +18,8 @@ function parseLuaWatchlist(luaContent) {
         const addonContent = addonDbMatch[1];
         
         // Match each addon entry (but not commented ones)
-        const addonPattern = /(?:^|\n)\s*(\["[^"]+"\]\s*=\s*{[^}]+})/gm;
+        // Updated pattern to handle multi-line entries with inline comments
+        const addonPattern = /(?:^|\n)\s*(\["[^"]+"\]\s*=\s*\{[\s\S]*?\n\s*\})/gm;
         let match;
         
         while ((match = addonPattern.exec(addonContent)) !== null) {
@@ -30,7 +31,7 @@ function parseLuaWatchlist(luaContent) {
             if (beforeEntry.trim().startsWith('--')) continue;
             
             // Extract name and content
-            const entryMatch = entry.match(/\["([^"]+)"\]\s*=\s*{([^}]+)}/);
+            const entryMatch = entry.match(/\["([^"]+)"\]\s*=\s*\{([\s\S]*?)\}/);
             if (!entryMatch) continue;
             
             const name = entryMatch[1];
@@ -76,7 +77,8 @@ function parseLuaWatchlist(luaContent) {
         const authorContent = authorDbMatch[1];
         
         // Match each author entry (but not commented ones)
-        const authorPattern = /(?:^|\n)\s*(\["[^"]+"\]\s*=\s*{[^}]+})/gm;
+        // Updated pattern to handle multi-line entries with inline comments
+        const authorPattern = /(?:^|\n)\s*(\["[^"]+"\]\s*=\s*\{[\s\S]*?\n\s*\})/gm;
         let match;
         
         while ((match = authorPattern.exec(authorContent)) !== null) {
@@ -88,7 +90,7 @@ function parseLuaWatchlist(luaContent) {
             if (beforeEntry.trim().startsWith('--')) continue;
             
             // Extract name and content
-            const entryMatch = entry.match(/\["([^"]+)"\]\s*=\s*{([^}]+)}/);
+            const entryMatch = entry.match(/\["([^"]+)"\]\s*=\s*\{([\s\S]*?)\}/);
             if (!entryMatch) continue;
             
             const name = entryMatch[1];
@@ -119,8 +121,9 @@ function updateHtmlWithWatchlist(htmlPath, watchlistData) {
     const watchlistDataString = JSON.stringify(watchlistData, null, 12);
     
     // Replace only the watchlistData declaration, stopping before const reasonLabels
+    // Updated to handle both Unix and Windows line endings
     html = html.replace(
-        /const watchlistData = \{[\s\S]*?\n\s*\};(?=\n\n\s+const reasonLabels)/,
+        /const watchlistData = \{[\s\S]*?\r?\n\s*\};(?=\r?\n\r?\n\s+const reasonLabels)/,
         `const watchlistData = ${watchlistDataString};`
     );
     
