@@ -16,7 +16,7 @@ if (!fs.existsSync(distDir)) {
 }
 
 // Output file path
-const outputZip = path.join(distDir, `addonanalyzer-${version}.zip`);
+const outputZip = path.join(distDir, `andy-${version}.zip`);
 
 // Files/folders to exclude from the build
 // Only include files necessary for the addon to run in ESO
@@ -46,13 +46,13 @@ const excludePatterns = [
   // IDE & Editor
   '.vscode',
   
-  // Legacy/Sample Files
-  'sample_saved_variables_pre_804000.lua',
-  
+  // Documentation & Scripts
+  'docs',
+  'scripts',
+
   // Deployment (if exists)
   'deploy',
   '.deploy-exclude',
-  'build-temp.ps1'
 ];
 
 /**

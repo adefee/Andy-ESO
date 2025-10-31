@@ -65,7 +65,7 @@ function parseArgs() {
  */
 function showHelp() {
   console.log(`
-${colors.bright}ANDY -AddonAnalyzer ESO - Version Management Script${colors.reset}
+${colors.bright}Andy - ESO Addon Analyzer - Version Management Script${colors.reset}
 
 ${colors.bright}Usage:${colors.reset}
   npm run prep-release -- <version> [options]
@@ -170,8 +170,8 @@ function updatePackageJson(version) {
 /**
  * Update AddonAnalyzer.txt manifest
  */
-function updateAddonAnalyzerTxt(version) {
-  const txtPath = path.join(__dirname, 'AddonAnalyzer.txt');
+function updateAndyTxt(version) {
+  const txtPath = path.join(__dirname, 'Andy.txt');
   let content = fs.readFileSync(txtPath, 'utf8');
   
   const addonVersion = calculateAddonVersion(version);
@@ -187,7 +187,7 @@ function updateAddonAnalyzerTxt(version) {
   content = content.replace(/## AddOnVersion: \d+/, `## AddOnVersion: ${addonVersion}`);
   
   fs.writeFileSync(txtPath, content);
-  log.success(`Updated AddonAnalyzer.txt:`);
+  log.success(`Updated Andy.txt:`);
   log.info(`  Version: ${oldVersion} → ${version}`);
   log.info(`  AddOnVersion: ${oldAddonVersion} → ${addonVersion}`);
 }
@@ -196,7 +196,7 @@ function updateAddonAnalyzerTxt(version) {
  * Update variables.lua
  */
 function updateVariablesLua(version) {
-  const luaPath = path.join(__dirname, 'variables.lua');
+  const luaPath = path.join(__dirname, 'AndyVariables.lua');
   let content = fs.readFileSync(luaPath, 'utf8');
   
   const addonVersion = calculateAddonVersion(version);
@@ -212,7 +212,7 @@ function updateVariablesLua(version) {
   content = content.replace(/versionESO = \d+/, `versionESO = ${addonVersion}`);
   
   fs.writeFileSync(luaPath, content);
-  log.success(`Updated variables.lua:`);
+  log.success(`Updated AndyVariables.lua:`);
   log.info(`  version: ${oldVersion} → ${version}`);
   log.info(`  versionESO: ${oldESOVersion} → ${addonVersion}`);
 }

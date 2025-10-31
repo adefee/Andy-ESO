@@ -130,9 +130,33 @@ function updateHtmlWithWatchlist(htmlPath, watchlistData) {
     fs.writeFileSync(htmlPath, html, 'utf8');
 }
 
+function parseVersionInfo(txtContent) {
+    const versionMatch = txtContent.match(/##\s*Version:\s*(.+)/);
+    const apiMatch = txtContent.match(/##\s*APIVersion:\s*(\d+)/);
+    
+    return {
+        version: versionMatch ? versionMatch[1].trim() : 'Unknown',
+        apiVersion: apiMatch ? apiMatch[1].trim() : 'Unknown'
+    };
+}
+
+function updateHtmlWithVersionInfo(htmlPath, versionInfo) {
+    let html = fs.readFileSync(htmlPath, 'utf8');
+    
+    // Replace version in the version display section
+    // Updated to handle both Unix and Windows line endings
+    html = html.replace(
+        /const versionInfo = \{[\s\S]*?\r?\n\s*\};(?=\r?\n)/,
+        `const versionInfo = ${JSON.stringify(versionInfo, null, 12)};`
+    );
+    
+    fs.writeFileSync(htmlPath, html, 'utf8');
+}
+
 function main() {
     const rootDir = path.join(__dirname, '..');
     const luaPath = path.join(rootDir, 'AndyWatchlist.lua');
+    const txtPath = path.join(rootDir, 'Andy.txt');
     const htmlPath = path.join(rootDir, 'docs', 'index.html');
     
     console.log('📖 Reading AndyWatchlist.lua...');
@@ -143,10 +167,17 @@ function main() {
     
     console.log(`✅ Found ${Object.keys(watchlistData.addons).length} addon(s) and ${Object.keys(watchlistData.authors).length} author(s)`);
     
+    console.log('📖 Reading Andy.txt for version info...');
+    const txtContent = fs.readFileSync(txtPath, 'utf8');
+    const versionInfo = parseVersionInfo(txtContent);
+    
+    console.log(`📦 Version: ${versionInfo.version}, API: ${versionInfo.apiVersion}`);
+    
     console.log('📝 Updating docs/index.html...');
     updateHtmlWithWatchlist(htmlPath, watchlistData);
+    updateHtmlWithVersionInfo(htmlPath, versionInfo);
     
-    console.log('✨ Done! docs/index.html has been updated with the latest watchlist data.');
+    console.log('✨ Done! docs/index.html has been updated with the latest watchlist data and version info.');
 }
 
 if (require.main === module) {

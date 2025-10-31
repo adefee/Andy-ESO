@@ -3,22 +3,31 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Andy - Addon Analyzer for ESO</title>
-    <meta name="description" content="An Elder Scrolls Online addon that helps protect the community by identifying malicious, stolen, or problematic addons.">
+    <title>Andy - ESO Addon Analyzer</title>
+    <meta name="description" content="An Elder Scrolls Online addon that helps protect the community by identifying malicious, stolen, paywalled, or ToS/EULA-violating addons.">
     <style>
         :root {
-            --primary-color: #FF8800;
-            --secondary-color: #2C3E50;
-            --danger-color: #E74C3C;
-            --warning-color: #F39C12;
-            --success-color: #27AE60;
-            --bg-dark: #1a1a1a;
-            --bg-light: #f8f9fa;
-            --text-dark: #333;
-            --text-light: #fff;
-            --card-bg: #ffffff;
-            --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            --shadow-hover: 0 8px 15px rgba(0, 0, 0, 0.2);
+            --primary: #FF8800;
+            --primary-hover: #FF9F33;
+            --accent: #FFA940;
+            --bg-primary: #0F0F0F;
+            --bg-secondary: #1A1A1A;
+            --bg-tertiary: #242424;
+            --bg-card: #1E1E1E;
+            --text-primary: #E8E8E8;
+            --text-secondary: #B0B0B0;
+            --text-muted: #808080;
+            --border: #333333;
+            --shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+            --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.6);
+            --danger: #FF4444;
+            --warning: #FFB84D;
+            --success: #4CAF50;
+            --info: #9B59B6;
+            --tos: #8B5CF6;
+            --radius-sm: 8px;
+            --radius-md: 12px;
+            --radius-lg: 16px;
         }
 
         * {
@@ -30,28 +39,33 @@
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
             line-height: 1.6;
-            color: var(--text-dark);
-            background: var(--bg-light);
+            color: var(--text-primary);
+            background: var(--bg-primary);
+            background-image: 
+                radial-gradient(at 0% 0%, rgba(255, 136, 0, 0.08) 0px, transparent 50%),
+                radial-gradient(at 100% 100%, rgba(255, 136, 0, 0.05) 0px, transparent 50%);
+            background-attachment: fixed;
         }
 
         /* Header */
         header {
-            background: linear-gradient(135deg, var(--secondary-color) 0%, #34495e 100%);
-            color: var(--text-light);
-            padding: 2rem 0;
-            box-shadow: var(--shadow);
+            background: var(--bg-secondary);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--border);
             position: sticky;
             top: 0;
             z-index: 1000;
+            box-shadow: var(--shadow);
         }
 
         .header-content {
-            max-width: 1200px;
+            max-width: 1400px;
             margin: 0 auto;
-            padding: 0 2rem;
+            padding: 1.5rem 2rem;
             display: flex;
             justify-content: space-between;
             align-items: center;
+            gap: 2rem;
         }
 
         .logo {
@@ -61,220 +75,364 @@
         }
 
         .logo-icon {
-            background: var(--primary-color);
-            width: 50px;
-            height: 50px;
-            border-radius: 10px;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+            width: 54px;
+            height: 54px;
+            border-radius: var(--radius-md);
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 24px;
-            font-weight: bold;
+            font-size: 28px;
+            font-weight: 800;
+            color: #fff;
+            box-shadow: 0 4px 12px rgba(255, 136, 0, 0.3);
         }
 
-        h1 {
-            font-size: 2rem;
+        .logo-text h1 {
+            font-size: 1.75rem;
             font-weight: 700;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
 
         .subtitle {
-            color: rgba(255, 255, 255, 0.8);
+            color: var(--text-secondary);
             font-size: 0.9rem;
-            margin-top: 0.25rem;
+        }
+
+        .version-badge {
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border);
+            padding: 0.4rem 0.9rem;
+            border-radius: var(--radius-sm);
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            white-space: nowrap;
+        }
+
+        .version-badge strong {
+            color: var(--primary);
         }
 
         nav {
             display: flex;
             gap: 2rem;
+            align-items: center;
         }
 
         nav a {
-            color: var(--text-light);
+            color: var(--text-secondary);
             text-decoration: none;
-            transition: color 0.3s;
+            transition: color 0.2s;
             font-weight: 500;
+            font-size: 0.95rem;
         }
 
         nav a:hover {
-            color: var(--primary-color);
+            color: var(--primary);
         }
 
         /* Main Content */
         main {
-            max-width: 1200px;
+            max-width: 1400px;
             margin: 0 auto;
-            padding: 3rem 2rem;
+            padding: 4rem 2rem;
         }
 
         section {
-            margin-bottom: 4rem;
-            scroll-margin-top: 80px;
+            margin-bottom: 5rem;
         }
 
         h2 {
-            font-size: 2rem;
-            margin-bottom: 1.5rem;
-            color: var(--secondary-color);
-            border-bottom: 3px solid var(--primary-color);
-            padding-bottom: 0.5rem;
+            font-size: 2.25rem;
+            margin-bottom: 1rem;
+            color: var(--text-primary);
+            font-weight: 700;
         }
 
-        /* About Section */
-        .about-grid {
+        h2::before {
+            content: '';
+            display: inline-block;
+            width: 4px;
+            height: 32px;
+            background: linear-gradient(180deg, var(--primary) 0%, var(--accent) 100%);
+            margin-right: 0.75rem;
+            border-radius: 2px;
+            vertical-align: middle;
+        }
+
+        .section-description {
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            margin-bottom: 2.5rem;
+            line-height: 1.7;
+        }
+
+        /* Feature Cards */
+        .feature-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 2rem;
-            margin-top: 2rem;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 3rem;
         }
 
         .feature-card {
-            background: var(--card-bg);
+            background: var(--bg-card);
+            border: 1px solid var(--border);
             padding: 2rem;
-            border-radius: 12px;
-            box-shadow: var(--shadow);
-            transition: transform 0.3s, box-shadow 0.3s;
+            border-radius: var(--radius-md);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--primary) 0%, var(--accent) 100%);
+            opacity: 0;
+            transition: opacity 0.3s;
         }
 
         .feature-card:hover {
-            transform: translateY(-5px);
-            box-shadow: var(--shadow-hover);
+            transform: translateY(-4px);
+            border-color: var(--primary);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .feature-card:hover::before {
+            opacity: 1;
         }
 
         .feature-icon {
             font-size: 2.5rem;
             margin-bottom: 1rem;
+            display: block;
         }
 
         .feature-card h3 {
-            color: var(--secondary-color);
-            margin-bottom: 1rem;
-            font-size: 1.3rem;
+            color: var(--text-primary);
+            margin-bottom: 0.75rem;
+            font-size: 1.25rem;
+            font-weight: 600;
         }
 
-        /* Watchlist Section */
+        .feature-card p {
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        /* Commands Section */
+        .commands-section {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            padding: 2.5rem;
+            border-radius: var(--radius-lg);
+            margin-top: 3rem;
+        }
+
+        .commands-section h3 {
+            color: var(--text-primary);
+            margin-bottom: 1.5rem;
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+
+        .commands-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 1rem;
+        }
+
+        .command-item {
+            background: var(--bg-secondary);
+            padding: 1rem 1.25rem;
+            border-radius: var(--radius-sm);
+            border-left: 3px solid var(--primary);
+            font-family: 'Courier New', monospace;
+            font-size: 0.95rem;
+        }
+
+        .command-item code {
+            color: var(--primary);
+            font-weight: 600;
+        }
+
+        .command-item span {
+            color: var(--text-secondary);
+            margin-left: 0.5rem;
+        }
+
+        /* Filter Controls */
         .filter-controls {
             display: flex;
             gap: 1rem;
             margin-bottom: 2rem;
             flex-wrap: wrap;
+            align-items: center;
         }
 
         .filter-btn {
             padding: 0.75rem 1.5rem;
-            border: 2px solid var(--secondary-color);
-            background: var(--card-bg);
-            color: var(--secondary-color);
-            border-radius: 8px;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            color: var(--text-secondary);
+            border-radius: var(--radius-sm);
             cursor: pointer;
             font-weight: 600;
-            transition: all 0.3s;
+            font-size: 0.9rem;
+            transition: all 0.2s;
         }
 
-        .filter-btn:hover,
+        .filter-btn:hover {
+            background: var(--bg-tertiary);
+            border-color: var(--primary);
+            color: var(--text-primary);
+        }
+
         .filter-btn.active {
-            background: var(--secondary-color);
-            color: var(--text-light);
+            background: var(--primary);
+            color: #fff;
+            border-color: var(--primary);
+            box-shadow: 0 2px 8px rgba(255, 136, 0, 0.3);
         }
 
         .search-box {
             flex: 1;
-            min-width: 250px;
-            padding: 0.75rem 1.5rem;
-            border: 2px solid #ddd;
-            border-radius: 8px;
-            font-size: 1rem;
-            transition: border-color 0.3s;
+            min-width: 280px;
+            padding: 0.875rem 1.25rem;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-sm);
+            color: var(--text-primary);
+            font-size: 0.95rem;
+            transition: all 0.2s;
         }
 
         .search-box:focus {
             outline: none;
-            border-color: var(--primary-color);
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(255, 136, 0, 0.1);
         }
 
+        .search-box::placeholder {
+            color: var(--text-muted);
+        }
+
+        /* Watchlist Items */
         .watchlist-grid {
             display: grid;
             gap: 1.5rem;
         }
 
         .watchlist-item {
-            background: var(--card-bg);
-            border-radius: 12px;
-            padding: 1.5rem;
-            box-shadow: var(--shadow);
-            border-left: 4px solid var(--danger-color);
-            transition: transform 0.3s, box-shadow 0.3s;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+            padding: 1.75rem;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .watchlist-item::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 4px;
+            background: var(--danger);
+        }
+
+        .watchlist-item.author::before {
+            background: var(--warning);
         }
 
         .watchlist-item:hover {
-            transform: translateX(5px);
-            box-shadow: var(--shadow-hover);
-        }
-
-        .watchlist-item.author {
-            border-left-color: var(--warning-color);
+            transform: translateX(4px);
+            border-color: var(--primary);
+            box-shadow: var(--shadow-lg);
         }
 
         .watchlist-header {
             display: flex;
             justify-content: space-between;
             align-items: start;
-            margin-bottom: 1rem;
+            margin-bottom: 1.25rem;
+            gap: 1rem;
         }
 
         .watchlist-name {
-            font-size: 1.3rem;
+            font-size: 1.4rem;
             font-weight: 700;
-            color: var(--secondary-color);
+            color: var(--text-primary);
+            word-break: break-word;
         }
 
         .watchlist-type {
-            background: rgba(0, 0, 0, 0.05);
-            padding: 0.25rem 0.75rem;
-            border-radius: 20px;
-            font-size: 0.85rem;
-            font-weight: 600;
+            background: var(--bg-tertiary);
+            color: var(--text-secondary);
+            padding: 0.35rem 0.85rem;
+            border-radius: var(--radius-sm);
+            font-size: 0.8rem;
+            font-weight: 700;
             text-transform: uppercase;
+            letter-spacing: 0.5px;
+            white-space: nowrap;
         }
 
         .reason-badge {
             display: inline-block;
-            padding: 0.5rem 1rem;
-            border-radius: 6px;
+            padding: 0.6rem 1.1rem;
+            border-radius: var(--radius-sm);
             font-weight: 600;
-            margin-bottom: 1rem;
+            margin-bottom: 1.25rem;
             font-size: 0.9rem;
+            letter-spacing: 0.3px;
         }
 
         .reason-malicious {
-            background: rgba(231, 76, 60, 0.1);
-            color: var(--danger-color);
+            background: rgba(255, 68, 68, 0.15);
+            color: var(--danger);
+            border: 1px solid rgba(255, 68, 68, 0.3);
         }
 
         .reason-stolen {
-            background: rgba(243, 156, 18, 0.1);
-            color: var(--warning-color);
+            background: rgba(255, 184, 77, 0.15);
+            color: var(--warning);
+            border: 1px solid rgba(255, 184, 77, 0.3);
         }
 
         .reason-paywall {
-            background: rgba(241, 196, 15, 0.1);
-            color: #F1C40F;
+            background: rgba(76, 175, 80, 0.15);
+            color: var(--success);
+            border: 1px solid rgba(76, 175, 80, 0.3);
         }
 
         .reason-tos_eula {
-            background: rgba(155, 89, 182, 0.1);
-            color: #9B59B6;
+            background: rgba(139, 92, 246, 0.15);
+            color: var(--tos);
+            border: 1px solid rgba(139, 92, 246, 0.3);
         }
 
         .watchlist-description {
-            margin-bottom: 1rem;
-            line-height: 1.6;
+            margin-bottom: 1.5rem;
+            line-height: 1.7;
+            color: var(--text-secondary);
         }
 
         .watchlist-meta {
             display: flex;
             gap: 1.5rem;
             font-size: 0.9rem;
-            color: #666;
+            color: var(--text-muted);
             flex-wrap: wrap;
         }
 
@@ -285,85 +443,97 @@
         }
 
         .platform-badge {
-            background: var(--secondary-color);
-            color: var(--text-light);
-            padding: 0.25rem 0.75rem;
-            border-radius: 4px;
-            font-size: 0.85rem;
+            background: var(--bg-tertiary);
+            color: var(--text-secondary);
+            padding: 0.35rem 0.85rem;
+            border-radius: var(--radius-sm);
+            font-size: 0.8rem;
+            font-weight: 600;
             text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
 
+        /* Empty State */
         .empty-state {
             text-align: center;
-            padding: 3rem;
-            color: #999;
+            padding: 4rem 2rem;
+            color: var(--text-muted);
         }
 
         .empty-state-icon {
             font-size: 4rem;
             margin-bottom: 1rem;
+            opacity: 0.5;
         }
 
         /* Report Section */
         .report-section {
-            background: linear-gradient(135deg, var(--primary-color) 0%, #ff9f33 100%);
-            color: var(--text-light);
-            padding: 3rem;
-            border-radius: 12px;
+            background: linear-gradient(135deg, rgba(255, 136, 0, 0.15) 0%, rgba(255, 159, 51, 0.1) 100%);
+            border: 1px solid rgba(255, 136, 0, 0.3);
+            padding: 4rem;
+            border-radius: var(--radius-lg);
             text-align: center;
-            box-shadow: var(--shadow-hover);
         }
 
         .report-section h2 {
-            color: var(--text-light);
-            border-bottom: none;
             margin-bottom: 1rem;
         }
 
+        .report-section h2::before {
+            display: none;
+        }
+
         .report-section p {
-            font-size: 1.1rem;
-            margin-bottom: 2rem;
-            opacity: 0.95;
+            font-size: 1.15rem;
+            color: var(--text-secondary);
+            margin-bottom: 2.5rem;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
         }
 
         .cta-button {
-            display: inline-block;
-            padding: 1rem 2.5rem;
-            background: var(--text-light);
-            color: var(--primary-color);
+            display: inline-flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 1.1rem 2.5rem;
+            background: var(--primary);
+            color: #fff;
             text-decoration: none;
-            border-radius: 8px;
+            border-radius: var(--radius-sm);
             font-weight: 700;
-            font-size: 1.1rem;
-            transition: transform 0.3s, box-shadow 0.3s;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            font-size: 1.05rem;
+            transition: all 0.3s;
+            box-shadow: 0 4px 16px rgba(255, 136, 0, 0.3);
         }
 
         .cta-button:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+            background: var(--primary-hover);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 24px rgba(255, 136, 0, 0.4);
         }
 
         /* Footer */
         footer {
-            background: var(--secondary-color);
-            color: var(--text-light);
+            background: var(--bg-secondary);
+            border-top: 1px solid var(--border);
             text-align: center;
-            padding: 2rem;
-            margin-top: 4rem;
+            padding: 2.5rem;
+            color: var(--text-secondary);
         }
 
         footer a {
-            color: var(--primary-color);
+            color: var(--primary);
             text-decoration: none;
+            transition: color 0.2s;
         }
 
         footer a:hover {
-            text-decoration: underline;
+            color: var(--primary-hover);
         }
 
         /* Responsive */
-        @media (max-width: 768px) {
+        @media (max-width: 968px) {
             .header-content {
                 flex-direction: column;
                 gap: 1.5rem;
@@ -372,15 +542,14 @@
             nav {
                 flex-direction: column;
                 gap: 1rem;
-                text-align: center;
             }
 
-            h1 {
-                font-size: 1.5rem;
+            .version-badge {
+                order: -1;
             }
 
             h2 {
-                font-size: 1.5rem;
+                font-size: 1.75rem;
             }
 
             .filter-controls {
@@ -390,6 +559,43 @@
             .search-box {
                 width: 100%;
             }
+
+            .report-section {
+                padding: 2.5rem 1.5rem;
+            }
+        }
+
+        @media (max-width: 640px) {
+            main {
+                padding: 2rem 1rem;
+            }
+
+            .commands-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Smooth scrolling */
+        html {
+            scroll-behavior: smooth;
+        }
+
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 12px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--bg-primary);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--bg-tertiary);
+            border-radius: 6px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--primary);
         }
     </style>
 </head>
@@ -398,16 +604,19 @@
         <div class="header-content">
             <div class="logo">
                 <div class="logo-icon">A</div>
-                <div>
+                <div class="logo-text">
                     <h1>Andy - Addon Analyzer</h1>
                     <p class="subtitle">Protecting the ESO Community</p>
                 </div>
+            </div>
+            <div class="version-badge">
+                <strong>v<span id="version">1.0.0</span></strong> • API <span id="apiVersion">101048</span>
             </div>
             <nav>
                 <a href="#about">About</a>
                 <a href="#watchlist">Browse Flagged</a>
                 <a href="#report">Report</a>
-                <a href="https://github.com/adefee/Andy" target="_blank">GitHub</a>
+                <a href="https://github.com/adefee/Andy-ESO" target="_blank">GitHub</a>
             </nav>
         </div>
     </header>
@@ -415,54 +624,54 @@
     <main>
         <section id="about">
             <h2>About Andy</h2>
-            <p style="font-size: 1.1rem; margin-bottom: 2rem;">
-                Andy (Addon Analyzer) is an Elder Scrolls Online addon that helps protect the community by identifying malicious, stolen, or problematic addons. It monitors your installed addons and alerts you if any match our database of flagged content.
+            <p class="section-description">
+                Andy (Addon Analyzer) is an Elder Scrolls Online addon that helps protect the community by identifying malicious, stolen, paywalled, or ToS/EULA-violating addons. It monitors your installed addons and alerts you if any match our watchlist of flagged content.
             </p>
             
-            <div class="about-grid">
+            <div class="feature-grid">
                 <div class="feature-card">
-                    <div class="feature-icon">🛡️</div>
+                    <span class="feature-icon">🛡️</span>
                     <h3>Automatic Protection</h3>
                     <p>Andy automatically scans your addons every time you load the game, checking for any new or updated problematic addons.</p>
                 </div>
                 
                 <div class="feature-card">
-                    <div class="feature-icon">🔍</div>
+                    <span class="feature-icon">🔍</span>
                     <h3>Manual Scanning</h3>
-                    <p>Run <code>/andy scan</code> at any time to perform a full analysis of your installed addons.</p>
+                    <p>Run <code>/andy scan</code> at any time to perform a full analysis of your installed addons against the watchlist.</p>
                 </div>
                 
                 <div class="feature-card">
-                    <div class="feature-icon">⚙️</div>
+                    <span class="feature-icon">⚙️</span>
                     <h3>Customizable Alerts</h3>
-                    <p>Control warning sounds, banners, and notification preferences with simple commands.</p>
+                    <p>Control warning sounds, banners, and notification preferences with simple commands. Suppress warnings until updates.</p>
                 </div>
                 
                 <div class="feature-card">
-                    <div class="feature-icon">👥</div>
+                    <span class="feature-icon">👥</span>
                     <h3>Community Driven</h3>
-                    <p>Our database is maintained by the community. Help us keep ESO safe by reporting problematic addons.</p>
+                    <p>Our watchlist is maintained by the community. Help us keep ESO safe by reporting problematic addons.</p>
                 </div>
             </div>
 
-            <div style="margin-top: 3rem; background: var(--card-bg); padding: 2rem; border-radius: 12px; box-shadow: var(--shadow);">
-                <h3 style="color: var(--secondary-color); margin-bottom: 1rem;">Available Commands</h3>
-                <ul style="list-style: none; display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 0.75rem;">
-                    <li><code>/andy scan</code> - Manually scan for flagged addons</li>
-                    <li><code>/andy suppress</code> - Suppress current warnings</li>
-                    <li><code>/andy monitor</code> - Re-enable warnings</li>
-                    <li><code>/andy sound</code> - Toggle warning sound</li>
-                    <li><code>/andy announce</code> - Toggle center screen banner</li>
-                    <li><code>/andy quiet</code> - Toggle quiet mode</li>
-                    <li><code>/andy debug</code> - Enable debug mode</li>
-                </ul>
+            <div class="commands-section">
+                <h3>Available Commands</h3>
+                <div class="commands-grid">
+                    <div class="command-item"><code>/andy scan</code> <span>— Manually scan for flagged addons</span></div>
+                    <div class="command-item"><code>/andy suppress</code> <span>— Suppress current warnings</span></div>
+                    <div class="command-item"><code>/andy monitor</code> <span>— Re-enable warnings</span></div>
+                    <div class="command-item"><code>/andy sound</code> <span>— Toggle warning sound</span></div>
+                    <div class="command-item"><code>/andy announce</code> <span>— Toggle center screen banner</span></div>
+                    <div class="command-item"><code>/andy quiet</code> <span>— Toggle quiet mode</span></div>
+                    <div class="command-item"><code>/andy debug</code> <span>— Enable debug mode</span></div>
+                </div>
             </div>
         </section>
 
         <section id="watchlist">
             <h2>Browse Flagged Addons & Authors</h2>
-            <p style="font-size: 1.1rem; margin-bottom: 2rem;">
-                Below is our current database of flagged addons and authors. If you have any of these installed, Andy will alert you.
+            <p class="section-description">
+                Below is our current watchlist of flagged addons and authors. If you have any of these installed, Andy will alert you.
             </p>
 
             <div class="filter-controls">
@@ -473,7 +682,7 @@
                 <button class="filter-btn" data-filter="stolen">Stolen</button>
                 <button class="filter-btn" data-filter="paywall">Paywall</button>
                 <button class="filter-btn" data-filter="tos_eula">ToS/EULA</button>
-                <input type="text" class="search-box" id="searchBox" placeholder="Search addons or authors...">
+                <input type="text" class="search-box" id="searchBox" placeholder="🔍 Search addons or authors...">
             </div>
 
             <div class="watchlist-grid" id="watchlistGrid">
@@ -484,18 +693,26 @@
         <section id="report" class="report-section">
             <h2>Report a Problematic Addon</h2>
             <p>
-                Found an addon that's malicious, stolen, or causing problems? Help protect the ESO community by reporting it!
+                Found an addon that's malicious, stolen, paywalled, or violating ToS/EULA? Help protect the ESO community by reporting it!
             </p>
-            <a href="https://github.com/adefee/Andy/issues/new" class="cta-button" target="_blank">Report on GitHub →</a>
+            <a href="https://github.com/adefee/Andy-ESO/issues/new" class="cta-button" target="_blank">
+                Report on GitHub →
+            </a>
         </section>
     </main>
 
     <footer>
-        <p>&copy; 2025 Andy - Addon Analyzer | Created by <a href="https://github.com/adefee" target="_blank">@adefee</a> | <a href="https://github.com/adefee/Andy" target="_blank">View on GitHub</a></p>
+        <p>&copy; 2025 Andy - Addon Analyzer | Created by <a href="https://github.com/adefee" target="_blank">@adefee</a> | <a href="https://github.com/adefee/Andy-ESO" target="_blank">View on GitHub</a></p>
     </footer>
 
     <script>
-        // Watchlist data from AndyWatchlist.lua
+        // Version info (auto-updated by build script)
+        const versionInfo = {
+          "version": "1.0.0",
+          "apiVersion": "101048"
+};
+
+        // Watchlist data from AndyWatchlist.lua (auto-updated by build script)
         const watchlistData = {
           "addons": {
                     "LibText": {
@@ -523,6 +740,10 @@
             paywall: "Paywall",
             tos_eula: "ToS/EULA Violation"
         };
+
+        // Update version display
+        document.getElementById('version').textContent = versionInfo.version;
+        document.getElementById('apiVersion').textContent = versionInfo.apiVersion;
 
         function renderWatchlist(filter = 'all', searchTerm = '') {
             const grid = document.getElementById('watchlistGrid');
@@ -556,7 +777,8 @@
                 if (searchTerm) {
                     const search = searchTerm.toLowerCase();
                     return item.name.toLowerCase().includes(search) || 
-                           item.description.toLowerCase().includes(search);
+                           item.description.toLowerCase().includes(search) ||
+                           (item.author && item.author.toLowerCase().includes(search));
                 }
                 
                 return true;

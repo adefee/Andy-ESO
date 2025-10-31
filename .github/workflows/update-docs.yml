@@ -6,6 +6,7 @@ on:
       - main
     paths:
       - 'AndyWatchlist.lua'
+      - 'Andy.txt'
       - 'scripts/update-docs.js'
       - '.github/workflows/update-docs.yml'
 
