@@ -38,7 +38,7 @@ Andy = {
     internal = {
       lastUpdate = 0,
       firstLoad = 1,
-      showDebug = 1
+      showDebug = 0
     },
     ignore = {
       enabled = false, -- If true, suppress warnings until new addon found or version updated

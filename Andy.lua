@@ -156,14 +156,6 @@ end
 -- Run any updates needed if addon has been updated
 function Andy.RuntimeUpdates()
   Andy.debugLog('Running RuntimeUpdates()')
-  if Andy.saved.internal.lastUpdate < Andy.versionESO then
-    local oldAndyVersion = Andy.saved.internal.lastUpdate
-    Andy.debugLog('oldAndyVersion: ' .. oldAndyVersion)
-    -- Run migrations in order
-    if oldAndyVersion < 100000 then
-      Andy.migrate_to_1_0_0()
-    end
-  end
 end
 
 

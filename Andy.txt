@@ -3,23 +3,22 @@
 ## Version: 1.0.0
 ## APIVersion: 101048
 ## SavedVariables: AndySavedVars
-## Description: Analyzes installed addons against a database of known malicious, stolen, or community-reported bad addons.
-## SavedVariables: AndySavedVars
+## Description: Checks installed addons against a database of known malicious, stolen, or community-flagged addons.
 
 ## Variables
 variables.lua
 
 ## Addons to Flag
-AddonWatchlist.lua
+AndyWatchlist.lua
 
 ## Utilities
-AddonAnalyzer-Util.lua
+Andy-Util.lua
 
 ## Core
-AddonAnalyzer-Scan.lua
+Andy-Scan.lua
 
 ## Init ANDY
-AddonAnalyzer.lua
+Andy.lua
 
 ## LICENSE
 ; See LICENSE in this addon directory.
