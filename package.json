@@ -1,6 +1,6 @@
 {
-  "name": "addonanalyzer-eso",
-  "description": "AddonAnalyzer compares installed ESO addons against a database of known malicious, stolen, or community-reported bad addons.",
+  "name": "andy-eso",
+  "description": "Andy compares installed ESO addons against a database of known malicious, stolen, or community-reported bad addons.",
   "version": "1.0.0",
   "license": "SEE LICENSE IN LICENSE",
   "private": false,
