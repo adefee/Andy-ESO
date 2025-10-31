@@ -2,7 +2,7 @@
 
 An Elder Scrolls Online addon that helps protect the community by identifying malicious, stolen, paywalled, or otherwise ToS/EULA-violating addons. This was initially created in response to the discovery of the [LibText console addon](https://www.esoui.com/downloads/info2363-LibText.html) by TheStylishIrish, which was removed by Bethesda after being discovered by community addon authors as being malicious. 
 
-#### Current Release: **v1.0.2** (ESO-101048)
+#### Current Release: **v1.0.3** (ESO-101048)
 
 ## Features
 

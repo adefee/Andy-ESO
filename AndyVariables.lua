@@ -12,8 +12,8 @@
 ]]--
 Andy = {
   name = "Andy",
-  version = "1.0.2",
-  versionESO = 100200,
+  version = "1.0.3",
+  versionESO = 100300,
   author = "Lent (IGN @CallMeLent, Github @adefee)",
   color = "D66E4A",
   attribution = {
