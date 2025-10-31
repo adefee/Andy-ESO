@@ -168,7 +168,7 @@ function updatePackageJson(version) {
 }
 
 /**
- * Update AddonAnalyzer.txt manifest
+ * Update Andy.txt manifest
  */
 function updateAndyTxt(version) {
   const txtPath = path.join(__dirname, 'Andy.txt');
@@ -193,7 +193,7 @@ function updateAndyTxt(version) {
 }
 
 /**
- * Update variables.lua
+ * Update AndyVariables.lua
  */
 function updateVariablesLua(version) {
   const luaPath = path.join(__dirname, 'AndyVariables.lua');
