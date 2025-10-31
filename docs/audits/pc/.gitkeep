@@ -1,0 +1,5 @@
+# PC Audits Directory
+
+This directory contains audit files for PC addons that have been reviewed and deemed safe.
+
+Each file should be named `addon-name.json` where `addon-name` matches the addon's name (lowercase, spaces replaced with hyphens).

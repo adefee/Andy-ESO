@@ -8,6 +8,7 @@ on:
       - 'AndyWatchlist.lua'
       - 'Andy.txt'
       - 'docs/updates/updates.json'
+      - 'docs/audits/**/*.json'
       - 'scripts/update-docs.js'
       - '.github/workflows/update-docs.yml'
 

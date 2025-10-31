@@ -1,0 +1,15 @@
+{
+  "addonName": "Joker",
+  "author": "@CallMeLent",
+  "platform": "pc",
+  "auditDate": "2025-10-31",
+  "lastVersionAudited": "8.6.5",
+  "outcome": "safe",
+  "notes": "Joker offers an assortment of sillyness to brighten your day: jokes, trivial, rolls, custom ready check, and more. It's been around since 2019, and the addon is fully open-source. Everything works as describes, with no noted flags.",
+  "auditor": "adefee",
+  "downloadSource": "https://github.com/adefee/Joker-ESO",
+  "categories": [
+    "UI",
+    "Chat"
+  ]
+}

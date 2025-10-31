@@ -150,6 +150,49 @@ function parseUpdates(updatesPath) {
     }
 }
 
+function parseAudits(auditsDir) {
+    const audits = {
+        console: [],
+        pc: []
+    };
+
+    try {
+        // Parse console audits
+        const consolePath = path.join(auditsDir, 'console');
+        if (fs.existsSync(consolePath)) {
+            const consoleFiles = fs.readdirSync(consolePath).filter(f => f.endsWith('.json'));
+            consoleFiles.forEach(file => {
+                try {
+                    const content = fs.readFileSync(path.join(consolePath, file), 'utf8');
+                    const audit = JSON.parse(content);
+                    audits.console.push(audit);
+                } catch (err) {
+                    console.warn(`⚠️  Could not parse ${file}:`, err.message);
+                }
+            });
+        }
+
+        // Parse PC audits
+        const pcPath = path.join(auditsDir, 'pc');
+        if (fs.existsSync(pcPath)) {
+            const pcFiles = fs.readdirSync(pcPath).filter(f => f.endsWith('.json'));
+            pcFiles.forEach(file => {
+                try {
+                    const content = fs.readFileSync(path.join(pcPath, file), 'utf8');
+                    const audit = JSON.parse(content);
+                    audits.pc.push(audit);
+                } catch (err) {
+                    console.warn(`⚠️  Could not parse ${file}:`, err.message);
+                }
+            });
+        }
+    } catch (error) {
+        console.warn('⚠️  Could not read audits directory:', error.message);
+    }
+
+    return audits;
+}
+
 function updateHtmlWithVersionInfo(htmlPath, versionInfo) {
     let html = fs.readFileSync(htmlPath, 'utf8');
     
@@ -176,11 +219,25 @@ function updateHtmlWithUpdates(htmlPath, updates) {
     fs.writeFileSync(htmlPath, html, 'utf8');
 }
 
+function updateHtmlWithAudits(htmlPath, audits) {
+    let html = fs.readFileSync(htmlPath, 'utf8');
+    
+    // Replace audits object
+    // Updated to handle both Unix and Windows line endings
+    html = html.replace(
+        /const auditsData = \{[\s\S]*?\r?\n\s*\};(?=\r?\n)/,
+        `const auditsData = ${JSON.stringify(audits, null, 12)};`
+    );
+    
+    fs.writeFileSync(htmlPath, html, 'utf8');
+}
+
 function main() {
     const rootDir = path.join(__dirname, '..');
     const luaPath = path.join(rootDir, 'AndyWatchlist.lua');
     const txtPath = path.join(rootDir, 'Andy.txt');
     const updatesPath = path.join(rootDir, 'docs', 'updates', 'updates.json');
+    const auditsDir = path.join(rootDir, 'docs', 'audits');
     const htmlPath = path.join(rootDir, 'docs', 'index.html');
     
     console.log('📖 Reading AndyWatchlist.lua...');
@@ -202,10 +259,16 @@ function main() {
     
     console.log(`📢 Found ${updates.length} update(s)`);
     
+    console.log('🔒 Reading audit files...');
+    const audits = parseAudits(auditsDir);
+    
+    console.log(`✅ Found ${audits.console.length} console audit(s) and ${audits.pc.length} PC audit(s)`);
+    
     console.log('📝 Updating docs/index.html...');
     updateHtmlWithWatchlist(htmlPath, watchlistData);
     updateHtmlWithVersionInfo(htmlPath, versionInfo);
     updateHtmlWithUpdates(htmlPath, updates);
+    updateHtmlWithAudits(htmlPath, audits);
     
     console.log('✨ Done! docs/index.html has been updated with the latest data.');
 }

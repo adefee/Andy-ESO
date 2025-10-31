@@ -397,6 +397,10 @@
             background: var(--warning);
         }
 
+        .watchlist-item.safe::before {
+            background: var(--success);
+        }
+
         .watchlist-item:hover {
             transform: translateX(4px);
             border-color: var(--primary);
@@ -899,6 +903,7 @@
             <nav id="navMenu">
                 <a href="#about">About</a>
                 <a href="#watchlist">Browse Flagged</a>
+                <a href="#audited">Safe Addons</a>
                 <a href="#updates">Updates</a>
                 <a href="#coffee">Support</a>
                 <a href="#report">Report</a>
@@ -968,7 +973,7 @@
                     Filters
                 </button>
                 <div class="filter-buttons" id="filterButtons">
-                    <button class="filter-btn active" data-filter="all">All</button>
+                    <button class="filter-btn active" data-filter="all">All Flagged</button>
                     <button class="filter-btn" data-filter="addon">Addons</button>
                     <button class="filter-btn" data-filter="author">Authors</button>
                     <button class="filter-btn" data-filter="malicious">Malicious</button>
@@ -980,6 +985,32 @@
             </div>
 
             <div class="watchlist-grid" id="watchlistGrid">
+                <!-- Will be populated by JavaScript -->
+            </div>
+        </section>
+
+        <section id="audited">
+            <h2>Audited Safe Addons</h2>
+            <p class="section-description">
+                These addons have been reviewed by the Andy team and verified as safe. Regular audits ensure continued safety.
+            </p>
+
+            <div class="filter-controls">
+                <button class="filter-toggle" id="auditFilterToggle" aria-label="Toggle audit filters">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M10 18h4v-2h-4v2zM3 6v2h18V6H3zm3 7h12v-2H6v2z"/>
+                    </svg>
+                    Platform
+                </button>
+                <div class="filter-buttons" id="auditFilterButtons">
+                    <button class="filter-btn active" data-audit-filter="all">All Platforms</button>
+                    <button class="filter-btn" data-audit-filter="console">Console</button>
+                    <button class="filter-btn" data-audit-filter="pc">PC</button>
+                </div>
+                <input type="text" class="search-box" id="auditSearchBox" placeholder="🔍 Search audited addons...">
+            </div>
+
+            <div class="watchlist-grid" id="auditedGrid">
                 <!-- Will be populated by JavaScript -->
             </div>
         </section>
@@ -1049,6 +1080,28 @@
                     "content": "The LibText console addon by TheStylishIrish has been identified as malicious. It contains a denylist that silently blocks some players' messages, market postings, and more. This addon has been removed by Bethesda. This discovery prompted the creation of Andy to help protect the community."
           }
 ];
+
+        // Audits data from audits directory (auto-updated by build script)
+        const auditsData = {
+          "console": [
+                    {
+                              "addonName": "Joker",
+                              "author": "@CallMeLent",
+                              "platform": "pc",
+                              "auditDate": "2025-10-31",
+                              "lastVersionAudited": "8.6.5",
+                              "outcome": "safe",
+                              "notes": "Joker offers an assortment of sillyness to brighten your day: jokes, trivial, rolls, custom ready check, and more. It's been around since 2019, and the addon is fully open-source. Everything works as describes, with no noted flags.",
+                              "auditor": "adefee",
+                              "downloadSource": "https://github.com/adefee/Joker-ESO",
+                              "categories": [
+                                        "UI",
+                                        "Chat"
+                              ]
+                    }
+          ],
+          "pc": []
+};
 
         // Watchlist data from AndyWatchlist.lua (auto-updated by build script)
         const watchlistData = {
@@ -1302,6 +1355,122 @@
         }
 
         renderUpdates();
+
+        // Render audited safe addons
+        function renderAuditedAddons(platformFilter = 'all', searchTerm = '') {
+            const grid = document.getElementById('auditedGrid');
+            grid.innerHTML = '';
+            
+            let items = [];
+            
+            // Combine both platform audits
+            if (platformFilter === 'all' || platformFilter === 'console') {
+                auditsData.console.forEach(audit => {
+                    items.push({ ...audit, platform: 'console' });
+                });
+            }
+            
+            if (platformFilter === 'all' || platformFilter === 'pc') {
+                auditsData.pc.forEach(audit => {
+                    items.push({ ...audit, platform: 'pc' });
+                });
+            }
+            
+            // Apply search filter
+            if (searchTerm) {
+                const search = searchTerm.toLowerCase();
+                items = items.filter(item => 
+                    item.addonName.toLowerCase().includes(search) ||
+                    item.author.toLowerCase().includes(search) ||
+                    (item.notes && item.notes.toLowerCase().includes(search))
+                );
+            }
+            
+            // Render items
+            if (items.length === 0) {
+                grid.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-state-icon">✅</div>
+                        <h3>No audited addons yet</h3>
+                        <p>Audited safe addons will appear here once reviewed</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            items.forEach(item => {
+                const platformDisplay = item.platform === 'console' ? 'Console' : 'PC';
+                
+                const card = document.createElement('div');
+                card.className = 'watchlist-item safe';
+                card.innerHTML = `
+                    <div class="watchlist-header">
+                        <div class="watchlist-name">${item.addonName}</div>
+                        <div class="watchlist-type">Safe</div>
+                    </div>
+                    <div class="reason-badge" style="background: rgba(76, 175, 80, 0.15); color: var(--success); border: 1px solid rgba(76, 175, 80, 0.3);">
+                        ✅ Audited Safe
+                    </div>
+                    <div class="watchlist-description">${item.notes}</div>
+                    <div class="watchlist-meta">
+                        <div class="meta-item">
+                            <span>👤</span>
+                            <span>Author: @${item.author}</span>
+                        </div>
+                        <div class="meta-item">
+                            <span>📅</span>
+                            <span>Audited: ${item.auditDate}</span>
+                        </div>
+                        <div class="meta-item">
+                            <span class="platform-badge">${platformDisplay}</span>
+                        </div>
+                        <div class="meta-item">
+                            <span>📦</span>
+                            <span>v${item.lastVersionAudited}</span>
+                        </div>
+                        ${item.downloadSource ? `
+                        <div class="meta-item">
+                            <span>🔗</span>
+                            <span><a href="${item.downloadSource}" target="_blank" style="color: var(--primary);">View Source</a></span>
+                        </div>
+                        ` : ''}
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        // Audit filter toggle (mobile)
+        const auditFilterToggle = document.getElementById('auditFilterToggle');
+        const auditFilterButtons = document.getElementById('auditFilterButtons');
+        
+        auditFilterToggle.addEventListener('click', function() {
+            auditFilterButtons.classList.toggle('active');
+        });
+
+        // Audit filter buttons
+        document.querySelectorAll('[data-audit-filter]').forEach(btn => {
+            btn.addEventListener('click', function() {
+                document.querySelectorAll('[data-audit-filter]').forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+                const filter = this.dataset.auditFilter;
+                const searchTerm = document.getElementById('auditSearchBox').value;
+                renderAuditedAddons(filter, searchTerm);
+                
+                // Close filter dropdown on mobile after selection
+                if (window.innerWidth <= 968) {
+                    auditFilterButtons.classList.remove('active');
+                }
+            });
+        });
+
+        // Audit search box
+        document.getElementById('auditSearchBox').addEventListener('input', function() {
+            const activeFilter = document.querySelector('[data-audit-filter].active').dataset.auditFilter;
+            renderAuditedAddons(activeFilter, this.value);
+        });
+
+        renderAuditedAddons();
 
         // Smooth scroll for navigation
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
