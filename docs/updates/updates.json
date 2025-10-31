@@ -1,0 +1,16 @@
+[
+  {
+    "id": "update-001",
+    "date": "2025-10-31",
+    "title": "Andy 1.0.0 Released",
+    "type": "release",
+    "content": "Initial release of Andy - Addon Analyzer! This addon helps protect the ESO community by identifying malicious, stolen, paywalled, or ToS/EULA-violating addons. Features include automatic monitoring, manual scanning, customizable alerts, and suppression support."
+  },
+  {
+    "id": "update-000",
+    "date": "2025-10-27",
+    "title": "LibText Addon Flagged",
+    "type": "alert",
+    "content": "The LibText console addon by TheStylishIrish has been identified as malicious. It contains a denylist that silently blocks some players' messages, market postings, and more. This addon has been removed by Bethesda. This discovery prompted the creation of Andy to help protect the community."
+  }
+]

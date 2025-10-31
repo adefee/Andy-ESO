@@ -178,7 +178,7 @@
 
         section {
             margin-bottom: 5rem;
-            scroll-margin-top: 100px; /* Offset for sticky header */
+            scroll-margin-top: var(--header-height, 100px); /* Dynamic offset for sticky header */
         }
 
         h2 {
@@ -508,6 +508,170 @@
             opacity: 0.5;
         }
 
+        /* Updates Section */
+        .updates-list {
+            display: grid;
+            gap: 1rem;
+        }
+
+        .update-item {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+            overflow: hidden;
+            transition: all 0.3s;
+        }
+
+        .update-item:hover {
+            border-color: var(--primary);
+        }
+
+        .update-header {
+            padding: 1.5rem;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 1rem;
+            user-select: none;
+        }
+
+        .update-header:hover {
+            background: var(--bg-tertiary);
+        }
+
+        .update-info {
+            flex: 1;
+        }
+
+        .update-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .update-meta {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .update-date {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        .update-type {
+            background: var(--bg-tertiary);
+            color: var(--text-secondary);
+            padding: 0.25rem 0.75rem;
+            border-radius: var(--radius-sm);
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .update-type.release {
+            background: rgba(76, 175, 80, 0.15);
+            color: var(--success);
+            border: 1px solid rgba(76, 175, 80, 0.3);
+        }
+
+        .update-type.alert {
+            background: rgba(255, 68, 68, 0.15);
+            color: var(--danger);
+            border: 1px solid rgba(255, 68, 68, 0.3);
+        }
+
+        .update-type.feature {
+            background: rgba(255, 136, 0, 0.15);
+            color: var(--primary);
+            border: 1px solid rgba(255, 136, 0, 0.3);
+        }
+
+        .update-toggle {
+            width: 28px;
+            height: 28px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            background: var(--bg-tertiary);
+            transition: all 0.3s;
+        }
+
+        .update-toggle svg {
+            width: 16px;
+            height: 16px;
+            fill: var(--text-secondary);
+            transition: transform 0.3s;
+        }
+
+        .update-item.expanded .update-toggle svg {
+            transform: rotate(180deg);
+        }
+
+        .update-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+        }
+
+        .update-item.expanded .update-content {
+            max-height: 500px;
+        }
+
+        .update-body {
+            padding: 0 1.5rem 1.5rem 1.5rem;
+            color: var(--text-secondary);
+            line-height: 1.7;
+        }
+
+        /* Buy Me a Coffee Section */
+        .coffee-section {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            padding: 3rem;
+            border-radius: var(--radius-lg);
+            text-align: center;
+        }
+
+        .coffee-section h2 {
+            margin-bottom: 1rem;
+        }
+
+        .coffee-section p {
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            margin-bottom: 2rem;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .coffee-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 1rem 2rem;
+            background: #FFDD00;
+            color: #000;
+            text-decoration: none;
+            border-radius: var(--radius-sm);
+            font-weight: 700;
+            font-size: 1.05rem;
+            transition: all 0.3s;
+            box-shadow: 0 4px 16px rgba(255, 221, 0, 0.3);
+        }
+
+        .coffee-button:hover {
+            background: #FFE84D;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 24px rgba(255, 221, 0, 0.4);
+        }
+
         /* Report Section */
         .report-section {
             background: linear-gradient(135deg, rgba(255, 136, 0, 0.15) 0%, rgba(255, 159, 51, 0.1) 100%);
@@ -529,9 +693,16 @@
             font-size: 1.15rem;
             color: var(--text-secondary);
             margin-bottom: 2.5rem;
-            max-width: 600px;
+            max-width: 700px;
             margin-left: auto;
             margin-right: auto;
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 1.5rem;
+            justify-content: center;
+            flex-wrap: wrap;
         }
 
         .cta-button {
@@ -553,6 +724,19 @@
             background: var(--primary-hover);
             transform: translateY(-2px);
             box-shadow: 0 6px 24px rgba(255, 136, 0, 0.4);
+        }
+
+        .cta-button.secondary {
+            background: var(--bg-card);
+            color: var(--text-primary);
+            border: 2px solid var(--border);
+            box-shadow: none;
+        }
+
+        .cta-button.secondary:hover {
+            background: var(--bg-tertiary);
+            border-color: var(--primary);
+            box-shadow: 0 4px 16px rgba(255, 136, 0, 0.2);
         }
 
         /* Footer */
@@ -715,6 +899,8 @@
             <nav id="navMenu">
                 <a href="#about">About</a>
                 <a href="#watchlist">Browse Flagged</a>
+                <a href="#updates">Updates</a>
+                <a href="#coffee">Support</a>
                 <a href="#report">Report</a>
                 <a href="https://github.com/adefee/Andy-ESO" target="_blank">GitHub</a>
             </nav>
@@ -798,14 +984,40 @@
             </div>
         </section>
 
-        <section id="report" class="report-section">
-            <h2>Report a Problematic Addon</h2>
-            <p>
-                Found an addon that's malicious, stolen, paywalled, or violating ToS/EULA? Help protect the ESO community by reporting it!
+        <section id="updates">
+            <h2>Latest Updates</h2>
+            <p class="section-description">
+                Stay informed about new releases, flagged addons, and community announcements.
             </p>
-            <a href="https://github.com/adefee/Andy-ESO/issues/new" class="cta-button" target="_blank">
-                Report on GitHub →
+
+            <div class="updates-list" id="updatesList">
+                <!-- Will be populated by JavaScript -->
+            </div>
+        </section>
+
+        <section id="coffee" class="coffee-section">
+            <h2>Support Andy</h2>
+            <p>
+                If Andy has helped keep your game safe and you'd like to support continued development, consider buying me a coffee! ☕
+            </p>
+            <a href="https://buymeacoffee.com/adefee" class="coffee-button" target="_blank">
+                ☕ Buy Me a Coffee
             </a>
+        </section>
+
+        <section id="report" class="report-section">
+            <h2>Help Protect the Community</h2>
+            <p>
+                Found a problematic addon or want us to review a specific addon? Submit a report or audit request to help keep ESO safe for everyone.
+            </p>
+            <div class="cta-buttons">
+                <a href="https://github.com/adefee/Andy-ESO/issues/new?template=report-addon.md&title=Report:%20[Addon%20Name]" class="cta-button" target="_blank">
+                    🚨 Report Problematic Addon
+                </a>
+                <a href="https://github.com/adefee/Andy-ESO/issues/new?template=audit-request.md&title=Audit%20Request:%20[Addon%20Name]" class="cta-button secondary" target="_blank">
+                    🔍 Request Addon Audit
+                </a>
+            </div>
         </section>
     </main>
 
@@ -819,6 +1031,24 @@
           "version": "1.0.0",
           "apiVersion": "101048"
 };
+
+        // Updates data from updates.json (auto-updated by build script)
+        const updatesData = [
+          {
+                    "id": "update-001",
+                    "date": "2025-10-31",
+                    "title": "Andy 1.0.0 Released",
+                    "type": "release",
+                    "content": "Initial release of Andy - Addon Analyzer! This addon helps protect the ESO community by identifying malicious, stolen, paywalled, or ToS/EULA-violating addons. Features include automatic monitoring, manual scanning, customizable alerts, and suppression support."
+          },
+          {
+                    "id": "update-000",
+                    "date": "2025-10-27",
+                    "title": "LibText Addon Flagged",
+                    "type": "alert",
+                    "content": "The LibText console addon by TheStylishIrish has been identified as malicious. It contains a denylist that silently blocks some players' messages, market postings, and more. This addon has been removed by Bethesda. This discovery prompted the creation of Andy to help protect the community."
+          }
+];
 
         // Watchlist data from AndyWatchlist.lua (auto-updated by build script)
         const watchlistData = {
@@ -853,18 +1083,33 @@
         document.getElementById('version').textContent = versionInfo.version;
         document.getElementById('apiVersion').textContent = versionInfo.apiVersion;
 
+        // Dynamic header height for scroll offset
+        function updateHeaderHeight() {
+            const header = document.querySelector('header');
+            const headerHeight = header.offsetHeight;
+            document.documentElement.style.setProperty('--header-height', `${headerHeight + 20}px`);
+        }
+
+        // Update on load and resize
+        updateHeaderHeight();
+        window.addEventListener('resize', updateHeaderHeight);
+
         // Mobile navigation toggle
         const navToggle = document.getElementById('navToggle');
         const navMenu = document.getElementById('navMenu');
         
         navToggle.addEventListener('click', function() {
             navMenu.classList.toggle('active');
+            // Recalculate header height after menu opens/closes
+            setTimeout(updateHeaderHeight, 100);
         });
 
         // Close nav when clicking a link
         document.querySelectorAll('#navMenu a').forEach(link => {
             link.addEventListener('click', function() {
                 navMenu.classList.remove('active');
+                // Recalculate header height after menu closes
+                setTimeout(updateHeaderHeight, 100);
             });
         });
 
@@ -1000,6 +1245,63 @@
 
         // Initial render
         renderWatchlist();
+
+        // Render updates
+        function renderUpdates() {
+            const updatesList = document.getElementById('updatesList');
+            
+            if (!updatesData || updatesData.length === 0) {
+                updatesList.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-state-icon">📰</div>
+                        <h3>No updates yet</h3>
+                        <p>Check back soon for news and announcements</p>
+                    </div>
+                `;
+                return;
+            }
+
+            updatesData.forEach((update, index) => {
+                const updateItem = document.createElement('div');
+                updateItem.className = `update-item ${index === 0 ? 'expanded' : ''}`;
+                updateItem.innerHTML = `
+                    <div class="update-header" data-update-id="${update.id}">
+                        <div class="update-info">
+                            <div class="update-title">${update.title}</div>
+                            <div class="update-meta">
+                                <span class="update-date">${formatDate(update.date)}</span>
+                                <span class="update-type ${update.type}">${update.type}</span>
+                            </div>
+                        </div>
+                        <div class="update-toggle">
+                            <svg viewBox="0 0 24 24">
+                                <path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z"/>
+                            </svg>
+                        </div>
+                    </div>
+                    <div class="update-content">
+                        <div class="update-body">${update.content}</div>
+                    </div>
+                `;
+                updatesList.appendChild(updateItem);
+            });
+
+            // Add click handlers for expand/collapse
+            document.querySelectorAll('.update-header').forEach(header => {
+                header.addEventListener('click', function() {
+                    const updateItem = this.closest('.update-item');
+                    updateItem.classList.toggle('expanded');
+                });
+            });
+        }
+
+        function formatDate(dateString) {
+            const date = new Date(dateString);
+            const options = { year: 'numeric', month: 'long', day: 'numeric' };
+            return date.toLocaleDateString('en-US', options);
+        }
+
+        renderUpdates();
 
         // Smooth scroll for navigation
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {

@@ -140,6 +140,16 @@ function parseVersionInfo(txtContent) {
     };
 }
 
+function parseUpdates(updatesPath) {
+    try {
+        const updatesContent = fs.readFileSync(updatesPath, 'utf8');
+        return JSON.parse(updatesContent);
+    } catch (error) {
+        console.warn('⚠️  Could not read updates.json, using empty array');
+        return [];
+    }
+}
+
 function updateHtmlWithVersionInfo(htmlPath, versionInfo) {
     let html = fs.readFileSync(htmlPath, 'utf8');
     
@@ -153,10 +163,24 @@ function updateHtmlWithVersionInfo(htmlPath, versionInfo) {
     fs.writeFileSync(htmlPath, html, 'utf8');
 }
 
+function updateHtmlWithUpdates(htmlPath, updates) {
+    let html = fs.readFileSync(htmlPath, 'utf8');
+    
+    // Replace updates array
+    // Updated to handle both Unix and Windows line endings
+    html = html.replace(
+        /const updatesData = \[[\s\S]*?\r?\n\s*\];(?=\r?\n)/,
+        `const updatesData = ${JSON.stringify(updates, null, 12)};`
+    );
+    
+    fs.writeFileSync(htmlPath, html, 'utf8');
+}
+
 function main() {
     const rootDir = path.join(__dirname, '..');
     const luaPath = path.join(rootDir, 'AndyWatchlist.lua');
     const txtPath = path.join(rootDir, 'Andy.txt');
+    const updatesPath = path.join(rootDir, 'docs', 'updates', 'updates.json');
     const htmlPath = path.join(rootDir, 'docs', 'index.html');
     
     console.log('📖 Reading AndyWatchlist.lua...');
@@ -173,11 +197,17 @@ function main() {
     
     console.log(`📦 Version: ${versionInfo.version}, API: ${versionInfo.apiVersion}`);
     
+    console.log('📰 Reading updates.json...');
+    const updates = parseUpdates(updatesPath);
+    
+    console.log(`📢 Found ${updates.length} update(s)`);
+    
     console.log('📝 Updating docs/index.html...');
     updateHtmlWithWatchlist(htmlPath, watchlistData);
     updateHtmlWithVersionInfo(htmlPath, versionInfo);
+    updateHtmlWithUpdates(htmlPath, updates);
     
-    console.log('✨ Done! docs/index.html has been updated with the latest watchlist data and version info.');
+    console.log('✨ Done! docs/index.html has been updated with the latest data.');
 }
 
 if (require.main === module) {
