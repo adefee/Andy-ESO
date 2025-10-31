@@ -242,7 +242,7 @@ function Andy.Activated(e)
 
   if Andy.saved then
     Andy.debugLog('Andy.saved is available')
-    if Andy.saved.internal.firstLoad > 0 then
+    if Andy.saved.internal and Andy.saved.internal.firstLoad > 0 then
       Andy.FirstRun()
     end
 
