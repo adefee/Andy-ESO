@@ -11,7 +11,7 @@
   *
 ]]--
 AddonAnalyzer = {
-  name = "AddonAnalyzer",
+  name = "Andy",
   version = "1.0.0",
   versionESO = 100000,
   author = "Lent (IGN @CallMeLent, Github @adefee)",

@@ -22,7 +22,7 @@ AddonAnalyzer = AddonAnalyzer or {}
 -- Platform field: "pc", "console", "both", or nil (nil defaults to "both")
 AddonAnalyzer.AddonWatchlistDb = {
     -- Example entries (you can add real ones as they're reported)
-    ["Joker"] = {
+    ["Jokerrrr"] = {
         reason = "malicious",
         description = "This is a joke addon that is not actually malicious, just here testing.",
         allVersions = true, -- If true, all versions are bad
@@ -67,7 +67,7 @@ AddonAnalyzer.AddonWatchlistDb = {
 -- Platform field: "pc", "console", "both", or nil (nil defaults to "both")
 AddonAnalyzer.AuthorWatchlistDb = {
     -- Example entries (you can add real ones as they're reported)
-    ["CallMeLent"] = {
+    ["Lentils"] = {
         reason = "malicious",
         description = "Not actually malicious",
         platform = "both",

@@ -1,4 +1,4 @@
-## Title: ANDY - Addon Analyzer
+## Title: Andy - Addon Analyzer
 ## Author: Lent (IGN @CallMeLent)
 ## Version: 1.0.0
 ## APIVersion: 101048

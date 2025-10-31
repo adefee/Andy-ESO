@@ -143,7 +143,7 @@ end
 -- @param isManualScan (boolean, optional) - If true, bypass suppress settings and show all results
 function Andy.quickScanAllAddons(isManualScan)
   local currentPlatform = AndyUtil.getPlatform()
-  Andy.debugLog('Running quickScanAllAddons() on platform: ' .. currentPlatform .. (isManualScan and ' (manual scan)' or ''))
+  d('|cFF8800[Andy]|r Running manual scan platform: ' .. currentPlatform .. (isManualScan and ' (manual scan)' or ''))
   
   -- Get all installed addons
   local installedAddons = Andy.getInstalledAddons()
@@ -210,10 +210,12 @@ function Andy.quickScanAllAddons(isManualScan)
         table.insert(reasons, #newAddonsFound .. ' new flagged addon(s) detected')
       end
       if versionChanged then
-        table.insert(reasons, 'AddonAnalyzer was updated')
+        table.insert(reasons, 'Andy was updated')
       end
-      d('|cFF0000[AddonAnalyzer WARNING]|r Alert triggered: ' .. table.concat(reasons, ' and '))
+      d('|cFF0000[Andy WARNING]|r Alert triggered: ' .. table.concat(reasons, ' and '))
     end
+
+    d('|cFF0000-----------------')
     
     d('|cFF0000[WARNING]|r Andy Found ' .. #flaggedAddons .. ' flagged addon(s):')
     
@@ -245,12 +247,14 @@ function Andy.quickScanAllAddons(isManualScan)
     
     d('|cFFFF00Please review these addons and consider removing them.|r')
     if not isManualScan then
-      d('|cAAAAAATip: Use |cFFFFFF/andy suppress|r to suppress warnings until a new flagged addon is detected.|r')
+      d('|cAAAAAATip: Use |cFFFFFF/andy suppress|r to suppress warnings until a new flagged addon is detected.')
     end
+
+    d('|cFF0000-----------------')
   elseif #flaggedAddons > 0 and not shouldShowWarnings then
     Andy.debugLog('Warnings suppressed due to suppress mode Run /andy monitor to re-enable warnings.')
   else
-    Andy.debugLog('No flagged addons found - all clear!')
+    d('|cFF8800[Andy]|r No flagged addons found - all clear!')
   end
   
   return flaggedAddons

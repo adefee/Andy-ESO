@@ -20,7 +20,7 @@ local ANDY_SAVED_VARS_VERSION = 1
 -- Helper; Outputs debug message to console if debug mode is enabled
 function Andy.debugLog(message)
   if AddonAnalyzer and Andy.saved and Andy.saved.internal and Andy.saved.internal.showDebug and Andy.saved.internal.showDebug > 0 then
-    d('AddonAnalyzer: ' .. message)
+    d('Andy: ' .. message)
   end
 end
 
@@ -43,7 +43,6 @@ end
 -- ScanCommand()
 -- Slash command handler for /andy scan
 function Andy.ScanCommand()
-  d('|cFF8800[AddonAnalyzer]|r Running manual scan...')
   Andy.quickScanAllAddons(true) -- Pass true to indicate manual/on-demand scan
 end
 
@@ -59,7 +58,7 @@ function Andy.SuppressCommand()
   local flaggedAddons = Andy.quickScanAllAddons()
   
   if #flaggedAddons == 0 then
-    d('|cFF8800[AddonAnalyzer]|r No flagged addons found. Nothing to suppress.')
+    d('|cFF8800[Andy]|r No flagged addons found. Nothing to suppress.')
     return
   end
   
@@ -72,7 +71,7 @@ function Andy.SuppressCommand()
     table.insert(Andy.saved.ignore.flaggedAddons, result.addonName)
   end
   
-  d('|cFF8800[AddonAnalyzer]|r Suppressing warnings for ' .. #flaggedAddons .. ' flagged addon(s). Warnings will be suppressed until a new flagged addon is detected or AddonAnalyzer is updated.')
+  d('|cFF8800[Andy]|r Suppressing warnings for ' .. #flaggedAddons .. ' flagged addon(s). Warnings will be suppressed until a new flagged addon is detected or AddonAnalyzer is updated.')
   Andy.debugLog('Suppressed addons: ' .. table.concat(Andy.saved.ignore.flaggedAddons, ', '))
 end
 
@@ -85,7 +84,7 @@ function Andy.MonitorCommand()
   end
   
   if not Andy.saved.ignore.enabled then
-    d('|cFF8800[AddonAnalyzer]|r Monitoring is already enabled.')
+    d('|cFF8800[Andy]|r Monitoring is already enabled.')
     return
   end
   
@@ -94,7 +93,7 @@ function Andy.MonitorCommand()
   Andy.saved.ignore.versionWhenIgnored = nil
   Andy.saved.ignore.flaggedAddons = {}
   
-  d('|cFF8800[AddonAnalyzer]|r Monitoring re-enabled. You will now receive all warnings.')
+  d('|cFF8800[Andy]|r Monitoring re-enabled. You will now receive all warnings.')
   
   -- Run a scan to show current state
   Andy.quickScanAllAddons()
@@ -104,7 +103,7 @@ end
 -- Specifically snake_case because it's a runtime function
 function Andy.FirstRun()
   Andy.debugLog('Running Andy.FirstRun()')
-  d('AddonAnalyzer ' .. Andy.version .. ' is now active! Type /andy or /addonanalyzer at any time to view available options.')
+  d('Andy (Addon Analyzer) ' .. Andy.version .. ' is now active! Type /andy at any time to view available options.')
   Andy.saved.internal.firstLoad = 0
 end
 
