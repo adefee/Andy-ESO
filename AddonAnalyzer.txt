@@ -4,7 +4,7 @@
 ## APIVersion: 101048
 ## SavedVariables: AndySavedVars
 ## Description: Analyzes installed addons against a database of known malicious, stolen, or community-reported bad addons.
-## SavedVariables: AddonAnalyzer_SavedVars
+## SavedVariables: AndySavedVars
 
 ## Variables
 variables.lua

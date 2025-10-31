@@ -11,8 +11,7 @@
   *
 ]]--
 
-AddonAnalyzer = AddonAnalyzer or {}
-local Andy = AddonAnalyzer
+Andy = Andy or {}
 local AndyUtil = AndyUtilityFn or {}
 
 -- getInstalledAddons()

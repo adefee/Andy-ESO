@@ -10,7 +10,7 @@
   * - Base/Default ANDY vars
   *
 ]]--
-AddonAnalyzer = {
+Andy = {
   name = "Andy",
   version = "1.0.0",
   versionESO = 100000,

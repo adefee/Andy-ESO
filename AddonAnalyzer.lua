@@ -11,8 +11,7 @@
   *
 ]]--
 
-AddonAnalyzer = AddonAnalyzer or {}
-local Andy = AddonAnalyzer
+Andy = Andy or {}
 local AndyUtil = AndyUtilityFn or {} -- utility functions used throughout
 local ANDY_SAVED_VARS_VERSION = 1
 
@@ -157,7 +156,6 @@ end
 -- Run any updates needed if addon has been updated
 function Andy.RuntimeUpdates()
   Andy.debugLog('Running RuntimeUpdates()')
-  Andy.debugLog('Andy.saved.internal.lastUpdate: ' .. Andy.saved.internal.lastUpdate)
   if Andy.saved.internal.lastUpdate < Andy.versionESO then
     local oldAndyVersion = Andy.saved.internal.lastUpdate
     Andy.debugLog('oldAndyVersion: ' .. oldAndyVersion)
