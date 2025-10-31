@@ -134,6 +134,41 @@
             color: var(--primary);
         }
 
+        .nav-toggle,
+        .filter-toggle {
+            display: none;
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border);
+            color: var(--text-primary);
+            padding: 0.75rem 1.25rem;
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.95rem;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.2s;
+        }
+
+        .nav-toggle:hover,
+        .filter-toggle:hover {
+            background: var(--bg-card);
+            border-color: var(--primary);
+        }
+
+        .nav-toggle svg,
+        .filter-toggle svg {
+            width: 20px;
+            height: 20px;
+            fill: currentColor;
+        }
+
+        .nav-menu {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+        }
+
         /* Main Content */
         main {
             max-width: 1400px;
@@ -143,6 +178,7 @@
 
         section {
             margin-bottom: 5rem;
+            scroll-margin-top: 100px; /* Offset for sticky header */
         }
 
         h2 {
@@ -276,6 +312,12 @@
             margin-bottom: 2rem;
             flex-wrap: wrap;
             align-items: center;
+        }
+
+        .filter-buttons {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
         }
 
         .filter-btn {
@@ -535,25 +577,77 @@
         /* Responsive */
         @media (max-width: 968px) {
             .header-content {
-                flex-direction: column;
-                gap: 1.5rem;
-            }
-
-            nav {
-                flex-direction: column;
+                flex-wrap: wrap;
                 gap: 1rem;
             }
 
+            .logo {
+                flex: 1;
+            }
+
             .version-badge {
-                order: -1;
+                order: 2;
+            }
+
+            .nav-toggle {
+                display: flex;
+                order: 3;
+            }
+
+            nav {
+                order: 4;
+                width: 100%;
+                flex-direction: column;
+                gap: 0.5rem;
+                display: none;
+                background: var(--bg-tertiary);
+                padding: 1rem;
+                border-radius: var(--radius-sm);
+                border: 1px solid var(--border);
+            }
+
+            nav.active {
+                display: flex;
+            }
+
+            nav a {
+                padding: 0.75rem;
+                border-radius: var(--radius-sm);
+                transition: all 0.2s;
+            }
+
+            nav a:hover {
+                background: var(--bg-card);
             }
 
             h2 {
                 font-size: 1.75rem;
             }
 
+            .filter-toggle {
+                display: flex;
+                width: 100%;
+            }
+
             .filter-controls {
                 flex-direction: column;
+                gap: 0.75rem;
+            }
+
+            .filter-buttons {
+                display: none;
+                flex-direction: column;
+                gap: 0.5rem;
+                width: 100%;
+            }
+
+            .filter-buttons.active {
+                display: flex;
+            }
+
+            .filter-btn {
+                width: 100%;
+                text-align: left;
             }
 
             .search-box {
@@ -612,7 +706,13 @@
             <div class="version-badge">
                 <strong>v<span id="version">1.0.0</span></strong> • API <span id="apiVersion">101048</span>
             </div>
-            <nav>
+            <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation">
+                <svg viewBox="0 0 24 24">
+                    <path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/>
+                </svg>
+                Menu
+            </button>
+            <nav id="navMenu">
                 <a href="#about">About</a>
                 <a href="#watchlist">Browse Flagged</a>
                 <a href="#report">Report</a>
@@ -675,13 +775,21 @@
             </p>
 
             <div class="filter-controls">
-                <button class="filter-btn active" data-filter="all">All</button>
-                <button class="filter-btn" data-filter="addon">Addons</button>
-                <button class="filter-btn" data-filter="author">Authors</button>
-                <button class="filter-btn" data-filter="malicious">Malicious</button>
-                <button class="filter-btn" data-filter="stolen">Stolen</button>
-                <button class="filter-btn" data-filter="paywall">Paywall</button>
-                <button class="filter-btn" data-filter="tos_eula">ToS/EULA</button>
+                <button class="filter-toggle" id="filterToggle" aria-label="Toggle filters">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M10 18h4v-2h-4v2zM3 6v2h18V6H3zm3 7h12v-2H6v2z"/>
+                    </svg>
+                    Filters
+                </button>
+                <div class="filter-buttons" id="filterButtons">
+                    <button class="filter-btn active" data-filter="all">All</button>
+                    <button class="filter-btn" data-filter="addon">Addons</button>
+                    <button class="filter-btn" data-filter="author">Authors</button>
+                    <button class="filter-btn" data-filter="malicious">Malicious</button>
+                    <button class="filter-btn" data-filter="stolen">Stolen</button>
+                    <button class="filter-btn" data-filter="paywall">Paywall</button>
+                    <button class="filter-btn" data-filter="tos_eula">ToS/EULA</button>
+                </div>
                 <input type="text" class="search-box" id="searchBox" placeholder="🔍 Search addons or authors...">
             </div>
 
@@ -744,6 +852,29 @@
         // Update version display
         document.getElementById('version').textContent = versionInfo.version;
         document.getElementById('apiVersion').textContent = versionInfo.apiVersion;
+
+        // Mobile navigation toggle
+        const navToggle = document.getElementById('navToggle');
+        const navMenu = document.getElementById('navMenu');
+        
+        navToggle.addEventListener('click', function() {
+            navMenu.classList.toggle('active');
+        });
+
+        // Close nav when clicking a link
+        document.querySelectorAll('#navMenu a').forEach(link => {
+            link.addEventListener('click', function() {
+                navMenu.classList.remove('active');
+            });
+        });
+
+        // Mobile filter toggle
+        const filterToggle = document.getElementById('filterToggle');
+        const filterButtons = document.getElementById('filterButtons');
+        
+        filterToggle.addEventListener('click', function() {
+            filterButtons.classList.toggle('active');
+        });
 
         function renderWatchlist(filter = 'all', searchTerm = '') {
             const grid = document.getElementById('watchlistGrid');
@@ -853,6 +984,11 @@
                 const filter = this.dataset.filter;
                 const searchTerm = document.getElementById('searchBox').value;
                 renderWatchlist(filter, searchTerm);
+                
+                // Close filter dropdown on mobile after selection
+                if (window.innerWidth <= 968) {
+                    filterButtons.classList.remove('active');
+                }
             });
         });
 
