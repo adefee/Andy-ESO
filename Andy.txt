@@ -1,6 +1,6 @@
 ## Title: Andy - Addon Analyzer
 ## Author: Lent (IGN @CallMeLent)
-## Version: 1.0.1
+## Version: 1.0.2
 ## APIVersion: 101048
 ## SavedVariables: AndySavedVars
 ## Description: Checks installed addons against a database of known malicious, stolen, or community-flagged addons.

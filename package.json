@@ -1,7 +1,7 @@
 {
   "name": "andy-eso",
   "description": "Andy is an Elder Scrolls Online addon that helps protect the community by identifying malicious, stolen, paywalled, or ToS/EULA-violating addons. It monitors your installed addons and alerts you if any match our watchlist of flagged content.",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "license": "SEE LICENSE IN LICENSE",
   "private": false,
   "dependencies": {},
