@@ -12,7 +12,7 @@
 ]]--
 
 Andy = Andy or {}
-local AndyUtil = AndyUitl or {} -- utility functions used throughout
+local AndyUtil = AndyUtil or {} -- utility functions used throughout
 local ANDY_SAVED_VARS_VERSION = 1
 
 -- debugLog()
