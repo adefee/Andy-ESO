@@ -6,16 +6,16 @@
 ## Description: Checks installed addons against a database of known malicious, stolen, or community-flagged addons.
 
 ## Variables
-variables.lua
+AndyVariables.lua
 
 ## Addons to Flag
 AndyWatchlist.lua
 
 ## Utilities
-Andy-Util.lua
+AndyUtil.lua
 
 ## Core
-Andy-Scan.lua
+AndyScan.lua
 
 ## Init ANDY
 Andy.lua

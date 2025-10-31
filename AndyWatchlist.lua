@@ -14,27 +14,20 @@
   *
 ]]--
 
-AddonAnalyzer = AddonAnalyzer or {}
+Andy = Andy or {}
 
 -- Database of bad addons
 -- Key: Addon name (case-insensitive matching will be used)
 -- Value: Table with reason and optional version info
 -- Platform field: "pc", "console", "both", or nil (nil defaults to "both")
-AddonAnalyzer.AddonWatchlistDb = {
+Andy.AddonWatchlistDb = {
     -- Example entries (you can add real ones as they're reported)
-    ["Jokerrrr"] = {
+    ["LibText"] = {
         reason = "malicious",
-        description = "This is a joke addon that is not actually malicious, just here testing.",
+        description = "This addon has a denylist that silently blocks some players' messages, market postings, etc.",
         allVersions = true, -- If true, all versions are bad
-        platform = "pc", -- Available on both platforms
-        reportedDate = "2024-10-15"
-    },
-    ["Beam Me Up"] = {
-        reason = "malicious",
-        description = "This is a joke addon that is not actually malicious, just here testing.",
-        allVersions = true, -- If true, all versions are bad
-        platform = "pc", -- Available on both platforms
-        reportedDate = "2024-10-15"
+        platform = "console",
+        reportedDate = "2025-10-27"
     },
     -- ["StolenContentAddon"] = {
     --     reason = "stolen",
@@ -65,13 +58,13 @@ AddonAnalyzer.AddonWatchlistDb = {
 --      Examples: "Foo" will match "@Foo", "by Foo", "[Foo]", "Foo and Bar", etc.
 -- Value: Table with reason and description
 -- Platform field: "pc", "console", "both", or nil (nil defaults to "both")
-AddonAnalyzer.AuthorWatchlistDb = {
+Andy.AuthorWatchlistDb = {
     -- Example entries (you can add real ones as they're reported)
-    ["Lentils"] = {
+    ["TheStylishIrish"] = {
         reason = "malicious",
-        description = "Not actually malicious",
-        platform = "both",
-        reportedDate = "2024-10-20"
+        description = "Responsible for several malicious addons, now removed by Bethesda.",
+        platform = "console",
+        reportedDate = "2025-10-27"
     }
     -- ["StolenContentThief"] = {
     --     reason = "stolen",
@@ -82,7 +75,7 @@ AddonAnalyzer.AuthorWatchlistDb = {
 }
 
 -- Reason display names
-AddonAnalyzer.ReasonLabels = {
+Andy.ReasonLabels = {
     malicious = "malicious",
     stolen = "stolen content",
     community_reported = "community-reported as problematic"

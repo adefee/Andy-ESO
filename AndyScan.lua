@@ -12,7 +12,7 @@
 ]]--
 
 Andy = Andy or {}
-local AndyUtil = AndyUtilityFn or {}
+local AndyUtil = AndyUtil or {}
 
 -- getInstalledAddons()
 -- Get a list of installed addons
@@ -270,4 +270,4 @@ function Andy.quickScanAllAddons(isManualScan)
   return flaggedAddons
 end
 
-AddonAnalyzer = Andy or {}
+Andy = Andy or {}

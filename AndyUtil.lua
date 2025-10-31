@@ -11,7 +11,7 @@
   *
 ]]--
 
-local AndyUtil = AndyUtilityFn or {}
+AndyUtil = AndyUtil or {}
 
 -- isEmpty()
 -- Utility; Checks if given string is empty/nil
@@ -159,4 +159,4 @@ function AndyUtil.runPeriodicEvents(target, callbacks, skipIncrement)
   return false
 end
 
-AndyUtilityFn = AndyUtil or {}
+AndyUtil = AndyUtil or {}

@@ -12,7 +12,7 @@
 ]]--
 
 Andy = Andy or {}
-local AndyUtil = AndyUtilityFn or {} -- utility functions used throughout
+local AndyUtil = AndyUitl or {} -- utility functions used throughout
 local ANDY_SAVED_VARS_VERSION = 1
 
 -- debugLog()
@@ -141,29 +141,9 @@ function Andy.FirstRun()
 end
 
 
---[[----------------------------------------------------------
-  Version Migration Functions
-  When major changes to savedVars occur, we'll run these based on lastUpdate timestamp
-  ----------------------------------------------------------
-]]--
--- migrate_to_1_0_0()
--- Migration; Update 1.0.0 adds ... first build
-function Andy.migrate_to_1_0_0()
-  Andy.debugLog('Housekeeping for update to version 1.0.0')
-  Andy.saved.internal.lastUpdate = 100000 -- Version should be an esoVersion style
-end
-
--- Run any updates needed if addon has been updated
-function Andy.RuntimeUpdates()
-  Andy.debugLog('Running RuntimeUpdates()')
-end
-
-
 -- Intended to run each time `EVENT_ADD_ON_LOADED` fires
 function Andy.RuntimeOnLoad()
   Andy.debugLog('Running RuntimeOnLoad()')
-
-  Andy.RuntimeUpdates()
 
   --[[
     Periodic Events
