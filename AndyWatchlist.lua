@@ -60,10 +60,10 @@ Andy.AddonWatchlistDb = {
 -- Platform field: "pc", "console", "both", or nil (nil defaults to "both")
 Andy.AuthorWatchlistDb = {
     -- Example entries (you can add real ones as they're reported)
-    ["TheStylishIrish"] = {
+    ["Lent"] = {
         reason = "malicious",
         description = "Responsible for several malicious addons, now removed by Bethesda.",
-        platform = "console",
+        platform = "both",
         reportedDate = "2025-10-27"
     }
     -- ["StolenContentThief"] = {

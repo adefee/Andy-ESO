@@ -112,7 +112,9 @@ function Andy.SoundCommand()
   else
     d('|cFF8800[Andy]|r Warning sound enabled. Playing sample...')
     Andy.saved.enable.playSound = 1
-    PlaySound(SOUNDS.DUEL_FORFEIT)
+    PlaySound(SOUNDS.DEATH_RECAP_ATTACK_SHOWN)
+    zo_callLater(function() return PlaySound(SOUNDS.DEATH_RECAP_ATTACK_SHOWN) end, 200)
+    zo_callLater(function() return PlaySound(SOUNDS.DEATH_RECAP_ATTACK_SHOWN) end, 400)
   end
 end
 

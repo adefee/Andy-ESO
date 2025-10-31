@@ -202,12 +202,12 @@ function Andy.quickScanAllAddons(isManualScan)
   if #flaggedAddons > 0 and shouldShowWarnings then
     -- Play warning sound if enabled
     if Andy.saved and Andy.saved.enable and Andy.saved.enable.playSound > 0 then
-      PlaySound(SOUNDS.DUEL_FORFEIT)
+      PlaySound(SOUNDS.CHAMPION_POINTS_COMMITTED)
     end
     
     -- Show banner message if enabled
     if Andy.saved and Andy.saved.enable and Andy.saved.enable.showBanner > 0 then
-      local bannerMessage = "AddonAnalyzer: " .. #flaggedAddons .. " Flagged Addon" .. (#flaggedAddons > 1 and "s" or "") .. " Detected!"
+      local bannerMessage = "Andy: " .. #flaggedAddons .. " Flagged Addon" .. (#flaggedAddons > 1 and "s" or "") .. " Detected!"
       CENTER_SCREEN_ANNOUNCE:AddMessage(0, CSA_CATEGORY_LARGE_TEXT, SOUNDS.NONE, bannerMessage)
     end
     
