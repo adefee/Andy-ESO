@@ -1,0 +1,642 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Andy - Addon Analyzer for ESO</title>
+    <meta name="description" content="An Elder Scrolls Online addon that helps protect the community by identifying malicious, stolen, or problematic addons.">
+    <style>
+        :root {
+            --primary-color: #FF8800;
+            --secondary-color: #2C3E50;
+            --danger-color: #E74C3C;
+            --warning-color: #F39C12;
+            --success-color: #27AE60;
+            --bg-dark: #1a1a1a;
+            --bg-light: #f8f9fa;
+            --text-dark: #333;
+            --text-light: #fff;
+            --card-bg: #ffffff;
+            --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            --shadow-hover: 0 8px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            line-height: 1.6;
+            color: var(--text-dark);
+            background: var(--bg-light);
+        }
+
+        /* Header */
+        header {
+            background: linear-gradient(135deg, var(--secondary-color) 0%, #34495e 100%);
+            color: var(--text-light);
+            padding: 2rem 0;
+            box-shadow: var(--shadow);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .logo-icon {
+            background: var(--primary-color);
+            width: 50px;
+            height: 50px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        h1 {
+            font-size: 2rem;
+            font-weight: 700;
+        }
+
+        .subtitle {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 0.9rem;
+            margin-top: 0.25rem;
+        }
+
+        nav {
+            display: flex;
+            gap: 2rem;
+        }
+
+        nav a {
+            color: var(--text-light);
+            text-decoration: none;
+            transition: color 0.3s;
+            font-weight: 500;
+        }
+
+        nav a:hover {
+            color: var(--primary-color);
+        }
+
+        /* Main Content */
+        main {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 3rem 2rem;
+        }
+
+        section {
+            margin-bottom: 4rem;
+            scroll-margin-top: 80px;
+        }
+
+        h2 {
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+            color: var(--secondary-color);
+            border-bottom: 3px solid var(--primary-color);
+            padding-bottom: 0.5rem;
+        }
+
+        /* About Section */
+        .about-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .feature-card {
+            background: var(--card-bg);
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: var(--shadow);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-hover);
+        }
+
+        .feature-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .feature-card h3 {
+            color: var(--secondary-color);
+            margin-bottom: 1rem;
+            font-size: 1.3rem;
+        }
+
+        /* Watchlist Section */
+        .filter-controls {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .filter-btn {
+            padding: 0.75rem 1.5rem;
+            border: 2px solid var(--secondary-color);
+            background: var(--card-bg);
+            color: var(--secondary-color);
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .filter-btn:hover,
+        .filter-btn.active {
+            background: var(--secondary-color);
+            color: var(--text-light);
+        }
+
+        .search-box {
+            flex: 1;
+            min-width: 250px;
+            padding: 0.75rem 1.5rem;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border-color 0.3s;
+        }
+
+        .search-box:focus {
+            outline: none;
+            border-color: var(--primary-color);
+        }
+
+        .watchlist-grid {
+            display: grid;
+            gap: 1.5rem;
+        }
+
+        .watchlist-item {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: var(--shadow);
+            border-left: 4px solid var(--danger-color);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .watchlist-item:hover {
+            transform: translateX(5px);
+            box-shadow: var(--shadow-hover);
+        }
+
+        .watchlist-item.author {
+            border-left-color: var(--warning-color);
+        }
+
+        .watchlist-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            margin-bottom: 1rem;
+        }
+
+        .watchlist-name {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--secondary-color);
+        }
+
+        .watchlist-type {
+            background: rgba(0, 0, 0, 0.05);
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .reason-badge {
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            font-size: 0.9rem;
+        }
+
+        .reason-malicious {
+            background: rgba(231, 76, 60, 0.1);
+            color: var(--danger-color);
+        }
+
+        .reason-stolen {
+            background: rgba(243, 156, 18, 0.1);
+            color: var(--warning-color);
+        }
+
+        .reason-community {
+            background: rgba(155, 89, 182, 0.1);
+            color: #9B59B6;
+        }
+
+        .watchlist-description {
+            margin-bottom: 1rem;
+            line-height: 1.6;
+        }
+
+        .watchlist-meta {
+            display: flex;
+            gap: 1.5rem;
+            font-size: 0.9rem;
+            color: #666;
+            flex-wrap: wrap;
+        }
+
+        .meta-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .platform-badge {
+            background: var(--secondary-color);
+            color: var(--text-light);
+            padding: 0.25rem 0.75rem;
+            border-radius: 4px;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 3rem;
+            color: #999;
+        }
+
+        .empty-state-icon {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+        }
+
+        /* Report Section */
+        .report-section {
+            background: linear-gradient(135deg, var(--primary-color) 0%, #ff9f33 100%);
+            color: var(--text-light);
+            padding: 3rem;
+            border-radius: 12px;
+            text-align: center;
+            box-shadow: var(--shadow-hover);
+        }
+
+        .report-section h2 {
+            color: var(--text-light);
+            border-bottom: none;
+            margin-bottom: 1rem;
+        }
+
+        .report-section p {
+            font-size: 1.1rem;
+            margin-bottom: 2rem;
+            opacity: 0.95;
+        }
+
+        .cta-button {
+            display: inline-block;
+            padding: 1rem 2.5rem;
+            background: var(--text-light);
+            color: var(--primary-color);
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 700;
+            font-size: 1.1rem;
+            transition: transform 0.3s, box-shadow 0.3s;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .cta-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Footer */
+        footer {
+            background: var(--secondary-color);
+            color: var(--text-light);
+            text-align: center;
+            padding: 2rem;
+            margin-top: 4rem;
+        }
+
+        footer a {
+            color: var(--primary-color);
+            text-decoration: none;
+        }
+
+        footer a:hover {
+            text-decoration: underline;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                gap: 1.5rem;
+            }
+
+            nav {
+                flex-direction: column;
+                gap: 1rem;
+                text-align: center;
+            }
+
+            h1 {
+                font-size: 1.5rem;
+            }
+
+            h2 {
+                font-size: 1.5rem;
+            }
+
+            .filter-controls {
+                flex-direction: column;
+            }
+
+            .search-box {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="header-content">
+            <div class="logo">
+                <div class="logo-icon">A</div>
+                <div>
+                    <h1>Andy - Addon Analyzer</h1>
+                    <p class="subtitle">Protecting the ESO Community</p>
+                </div>
+            </div>
+            <nav>
+                <a href="#about">About</a>
+                <a href="#watchlist">Browse Flagged</a>
+                <a href="#report">Report</a>
+                <a href="https://github.com/adefee/Andy" target="_blank">GitHub</a>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <section id="about">
+            <h2>About Andy</h2>
+            <p style="font-size: 1.1rem; margin-bottom: 2rem;">
+                Andy (Addon Analyzer) is an Elder Scrolls Online addon that helps protect the community by identifying malicious, stolen, or problematic addons. It monitors your installed addons and alerts you if any match our database of flagged content.
+            </p>
+            
+            <div class="about-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">🛡️</div>
+                    <h3>Automatic Protection</h3>
+                    <p>Andy automatically scans your addons every time you load the game, checking for any new or updated problematic addons.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">🔍</div>
+                    <h3>Manual Scanning</h3>
+                    <p>Run <code>/andy scan</code> at any time to perform a full analysis of your installed addons.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">⚙️</div>
+                    <h3>Customizable Alerts</h3>
+                    <p>Control warning sounds, banners, and notification preferences with simple commands.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">👥</div>
+                    <h3>Community Driven</h3>
+                    <p>Our database is maintained by the community. Help us keep ESO safe by reporting problematic addons.</p>
+                </div>
+            </div>
+
+            <div style="margin-top: 3rem; background: var(--card-bg); padding: 2rem; border-radius: 12px; box-shadow: var(--shadow);">
+                <h3 style="color: var(--secondary-color); margin-bottom: 1rem;">Available Commands</h3>
+                <ul style="list-style: none; display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 0.75rem;">
+                    <li><code>/andy scan</code> - Manually scan for flagged addons</li>
+                    <li><code>/andy suppress</code> - Suppress current warnings</li>
+                    <li><code>/andy monitor</code> - Re-enable warnings</li>
+                    <li><code>/andy sound</code> - Toggle warning sound</li>
+                    <li><code>/andy announce</code> - Toggle center screen banner</li>
+                    <li><code>/andy quiet</code> - Toggle quiet mode</li>
+                    <li><code>/andy debug</code> - Enable debug mode</li>
+                </ul>
+            </div>
+        </section>
+
+        <section id="watchlist">
+            <h2>Browse Flagged Addons & Authors</h2>
+            <p style="font-size: 1.1rem; margin-bottom: 2rem;">
+                Below is our current database of flagged addons and authors. If you have any of these installed, Andy will alert you.
+            </p>
+
+            <div class="filter-controls">
+                <button class="filter-btn active" data-filter="all">All</button>
+                <button class="filter-btn" data-filter="addon">Addons</button>
+                <button class="filter-btn" data-filter="author">Authors</button>
+                <button class="filter-btn" data-filter="malicious">Malicious</button>
+                <button class="filter-btn" data-filter="stolen">Stolen</button>
+                <button class="filter-btn" data-filter="community">Community Reported</button>
+                <input type="text" class="search-box" id="searchBox" placeholder="Search addons or authors...">
+            </div>
+
+            <div class="watchlist-grid" id="watchlistGrid">
+                <!-- Will be populated by JavaScript -->
+            </div>
+        </section>
+
+        <section id="report" class="report-section">
+            <h2>Report a Problematic Addon</h2>
+            <p>
+                Found an addon that's malicious, stolen, or causing problems? Help protect the ESO community by reporting it!
+            </p>
+            <a href="https://github.com/adefee/Andy/issues/new" class="cta-button" target="_blank">Report on GitHub →</a>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2025 Andy - Addon Analyzer | Created by <a href="https://github.com/adefee" target="_blank">@adefee</a> | <a href="https://github.com/adefee/Andy" target="_blank">View on GitHub</a></p>
+    </footer>
+
+    <script>
+        // Watchlist data from AndyWatchlist.lua
+        const watchlistData = {
+          "addons": {
+                    "LibText": {
+                              "reason": "malicious",
+                              "description": "This addon has a denylist that silently blocks some players' messages, market postings, etc.",
+                              "allVersions": true,
+                              "platform": "console",
+                              "reportedDate": "2025-10-27"
+                    }
+          },
+          "authors": {
+                    "TheStylishIrish": {
+                              "reason": "malicious",
+                              "description": "Responsible for several malicious addons, now removed by Bethesda.",
+                              "platform": "console",
+                              "reportedDate": "2025-10-27"
+                    }
+          }
+};
+
+        const reasonLabels = {
+            malicious: "Malicious",
+            stolen: "Stolen Content",
+            community_reported: "Community Reported"
+        };
+
+        function renderWatchlist(filter = 'all', searchTerm = '') {
+            const grid = document.getElementById('watchlistGrid');
+            grid.innerHTML = '';
+            
+            let items = [];
+            
+            // Add addons
+            Object.entries(watchlistData.addons).forEach(([name, data]) => {
+                items.push({ type: 'addon', name, ...data });
+            });
+            
+            // Add authors
+            Object.entries(watchlistData.authors).forEach(([name, data]) => {
+                items.push({ type: 'author', name, ...data });
+            });
+            
+            // Apply filters
+            items = items.filter(item => {
+                // Type filter
+                if (filter !== 'all') {
+                    if (filter === 'addon' && item.type !== 'addon') return false;
+                    if (filter === 'author' && item.type !== 'author') return false;
+                    if (filter === 'malicious' && item.reason !== 'malicious') return false;
+                    if (filter === 'stolen' && item.reason !== 'stolen') return false;
+                    if (filter === 'community' && item.reason !== 'community_reported') return false;
+                }
+                
+                // Search filter
+                if (searchTerm) {
+                    const search = searchTerm.toLowerCase();
+                    return item.name.toLowerCase().includes(search) || 
+                           item.description.toLowerCase().includes(search);
+                }
+                
+                return true;
+            });
+            
+            // Render items
+            if (items.length === 0) {
+                grid.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-state-icon">🔍</div>
+                        <h3>No results found</h3>
+                        <p>Try adjusting your filters or search term</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            items.forEach(item => {
+                const reasonClass = item.reason === 'malicious' ? 'reason-malicious' : 
+                                   item.reason === 'stolen' ? 'reason-stolen' : 'reason-community';
+                
+                const platform = item.platform || 'both';
+                const platformDisplay = platform === 'both' ? 'PC & Console' : 
+                                       platform === 'pc' ? 'PC Only' : 'Console Only';
+                
+                const versions = item.allVersions ? 'All versions' : 
+                                item.versions ? item.versions.join(', ') : 'N/A';
+                
+                const card = document.createElement('div');
+                card.className = `watchlist-item ${item.type}`;
+                card.innerHTML = `
+                    <div class="watchlist-header">
+                        <div class="watchlist-name">${item.name}</div>
+                        <div class="watchlist-type">${item.type}</div>
+                    </div>
+                    <div class="reason-badge ${reasonClass}">
+                        ${reasonLabels[item.reason]}
+                    </div>
+                    <div class="watchlist-description">${item.description}</div>
+                    <div class="watchlist-meta">
+                        <div class="meta-item">
+                            <span>📅</span>
+                            <span>Reported: ${item.reportedDate}</span>
+                        </div>
+                        <div class="meta-item">
+                            <span class="platform-badge">${platformDisplay}</span>
+                        </div>
+                        ${item.type === 'addon' ? `
+                        <div class="meta-item">
+                            <span>📦</span>
+                            <span>${versions}</span>
+                        </div>
+                        ` : ''}
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        // Filter buttons
+        document.querySelectorAll('.filter-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+                const filter = this.dataset.filter;
+                const searchTerm = document.getElementById('searchBox').value;
+                renderWatchlist(filter, searchTerm);
+            });
+        });
+
+        // Search box
+        document.getElementById('searchBox').addEventListener('input', function() {
+            const activeFilter = document.querySelector('.filter-btn.active').dataset.filter;
+            renderWatchlist(activeFilter, this.value);
+        });
+
+        // Initial render
+        renderWatchlist();
+
+        // Smooth scroll for navigation
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth' });
+                }
+            });
+        });
+    </script>
+</body>
+</html>

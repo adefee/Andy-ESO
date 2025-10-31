@@ -4,15 +4,20 @@ An Elder Scrolls Online addon that helps protect the community by identifying ma
 
 ## Features
 
-- **Manual Scanning**: Run `/andy` or `/analyze-addons` to scan all installed addons
+- **Manual Scanning**: Run `/andy` or `/andy scan` to scan all installed addons
 - **Automatic Monitoring**: Automatically checks for new or updated addons on every game load
 - **Community Protection**: Warns users about addons that have been reported as malicious, stolen content, or problematic
 - **Version Tracking**: Tracks addon versions to detect updates and re-check them
 
 ## Commands
 
-- `/andy` - Run a full analysis of your installed addons
-- `/analyze-addons` - Alternative command for the same analysis
+- `/andy` or `/andy scan` - Manually scan for flagged addons
+- `/andy suppress` - Suppress current warnings until a new flagged addon is found or Andy is updated
+- `/andy monitor` - Re-enable warnings (undo suppress)
+- `/andy sound` - Toggle warning sound on/off
+- `/andy announce` - Toggle center screen banner on/off
+- `/andy quiet` - Toggle quiet mode (only show messages when flagged addons are found)
+- `/andy debug` - Enable debug mode (additional logging)
 
 ## How It Works
 
@@ -22,18 +27,39 @@ An Elder Scrolls Online addon that helps protect the community by identifying ma
 
 ## Database Management
 
-The addon maintains a database of known bad addons in `BadAddons.lua`. To add an entry:
+The addon maintains two databases in `AndyWatchlist.lua`:
 
+### Flagged Addons
 ```lua
-["AddonName"] = {
+Andy.AddonWatchlistDb["AddonName"] = {
     reason = "malicious",  -- Options: "malicious", "stolen", "community_reported"
     description = "Detailed description of the issue",
     allVersions = true,    -- Set to true if all versions are problematic
     -- OR
     versions = {"1.0.0", "1.0.1"},  -- List specific problematic versions
-    reportedDate = "2024-10-28"
+    platform = "pc",       -- Options: "pc", "console", "both" (or nil defaults to "both")
+    reportedDate = "2025-10-27"
 }
 ```
+
+### Flagged Authors
+```lua
+Andy.AuthorWatchlistDb["AuthorName"] = {
+    reason = "malicious",  -- Options: "malicious", "stolen", "community_reported"
+    description = "Description of why this author is flagged",
+    platform = "console",  -- Options: "pc", "console", "both" (or nil defaults to "both")
+    reportedDate = "2025-10-27"
+}
+```
+
+## Website
+
+Visit our [GitHub Pages site](https://adefee.github.io/Andy/) to:
+- Learn more about the addon
+- Browse the current database of flagged addons and authors
+- Report problematic addons
+
+The website automatically updates whenever changes are pushed to `AndyWatchlist.lua` on the main branch, thanks to a GitHub Actions workflow that syncs the data.
 
 ## Installation
 
@@ -46,11 +72,19 @@ The addon maintains a database of known bad addons in `BadAddons.lua`. To add an
 ## Contributing
 
 If you know of an addon that should be added to the database, please submit an issue or pull request with:
-- Addon name
-- Version(s) affected
+- Addon name or author name
+- Version(s) affected (for addons)
 - Reason (malicious/stolen/community_reported)
 - Description of the issue
+- Platform (pc/console/both)
 - Evidence or source of the report
+
+### For Maintainers
+
+When updating `AndyWatchlist.lua`:
+1. Add entries directly to the file
+2. Test locally with `npm run update-docs` to preview the website changes
+3. Push to main - the GitHub Pages site will automatically update
 
 ## Version
 

@@ -8,6 +8,7 @@
   "scripts": {
     "build": "node build.js",
     "prep-release": "node prep-release.js",
+    "update-docs": "node scripts/update-docs.js",
     "dev-copy": "xcopy \".\" \"%USERPROFILE%\\OneDrive\\Documents\\Elder Scrolls Online\\live\\Addons\\Andy\" /s /i /y /exclude:.deploy-exclude && echo Copied to live Addons folder."
   },
   "devDependencies": {

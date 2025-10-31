@@ -1,0 +1,45 @@
+name: Update Documentation
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'AndyWatchlist.lua'
+      - 'scripts/update-docs.js'
+      - '.github/workflows/update-docs.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  update-docs:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+
+      - name: Update docs with latest watchlist
+        run: node scripts/update-docs.js
+
+      - name: Check for changes
+        id: git-check
+        run: |
+          git diff --exit-code docs/index.html || echo "changed=true" >> $GITHUB_OUTPUT
+
+      - name: Commit and push changes
+        if: steps.git-check.outputs.changed == 'true'
+        run: |
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git add docs/index.html
+          git commit -m "docs: auto-update watchlist data [skip ci]"
+          git push
