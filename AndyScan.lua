@@ -12,7 +12,7 @@
 ]]--
 
 Andy = Andy or {}
-local AndyUtil = AndyUtilityFn or {}
+local AndyUtil = AndyUtil or {}
 
 -- getInstalledAddons()
 -- Get a list of installed addons
@@ -141,7 +141,7 @@ end
 -- Called on UI load, gets list of addons and scans each against AddonWatchlistDb
 -- @param isManualScan (boolean, optional) - If true, bypass suppress settings and show all results
 function Andy.quickScanAllAddons(isManualScan)
-    
+
   -- Get all installed addons
   local installedAddons = Andy.getInstalledAddons()
   local flaggedAddons = {}
@@ -268,4 +268,4 @@ function Andy.quickScanAllAddons(isManualScan)
   return flaggedAddons
 end
 
-AddonAnalyzer = Andy or {}
+Andy = Andy or {}
