@@ -159,4 +159,18 @@ function AndyUtil.runPeriodicEvents(target, callbacks, skipIncrement)
   return false
 end
 
+-- PlayAlertSound()
+-- Util: Plays the alert sound
+function AndyUtil.PlayAlertSound()
+  PlaySound(SOUNDS.DEATH_RECAP_ATTACK_SHOWN)
+  zo_callLater(function() return PlaySound(SOUNDS.DEATH_RECAP_ATTACK_SHOWN) end, 150)
+  zo_callLater(function() return PlaySound(SOUNDS.DEATH_RECAP_ATTACK_SHOWN) end, 300)
+end
+
+-- PlayAlertBanner()
+-- Util: Shows large banner message on center screen
+function AndyUtil.PlayAlertBanner(message)
+  zo_callLater(function() return CENTER_SCREEN_ANNOUNCE:AddMessage(0, CSA_CATEGORY_LARGE_TEXT, SOUNDS.INTERACT_WINDOW_OPEN, message) end, 1500)
+end
+
 AndyUtil = AndyUtil or {}
