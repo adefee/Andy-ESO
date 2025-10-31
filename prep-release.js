@@ -342,7 +342,7 @@ async function main() {
   try {
     // Update all version files
     updatePackageJson(options.version);
-    updateAddonAnalyzerTxt(options.version);
+    updateAndyTxt(options.version);
     updateVariablesLua(options.version);
     updateReadme(options.version);
 
