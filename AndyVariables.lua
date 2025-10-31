@@ -34,6 +34,7 @@ Andy = {
       autoScan = 1, -- Automatically scan on UI reload
       playSound = 1, -- Play warning sound when flagged addons detected
       showBanner = 1, -- Show center screen banner when flagged addons detected
+      quietMode = 0, -- If enabled, only show messages when scan finds flagged addons
     },
     internal = {
       lastUpdate = 0,

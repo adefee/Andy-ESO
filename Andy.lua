@@ -110,8 +110,9 @@ function Andy.SoundCommand()
     d('|cFF8800[Andy]|r Warning sound disabled.')
     Andy.saved.enable.playSound = 0
   else
-    d('|cFF8800[Andy]|r Warning sound enabled.')
+    d('|cFF8800[Andy]|r Warning sound enabled. Playing sample...')
     Andy.saved.enable.playSound = 1
+    PlaySound(SOUNDS.DUEL_FORFEIT)
   end
 end
 
@@ -129,6 +130,23 @@ function Andy.AnnounceCommand()
   else
     d('|cFF8800[Andy]|r Center screen banner enabled.')
     Andy.saved.enable.showBanner = 1
+  end
+end
+
+-- QuietCommand()
+-- Slash command handler for /andy quiet
+function Andy.QuietCommand()
+  if not Andy.saved or not Andy.saved.enable then
+    d('Andy: Error - saved variables not initialized yet.')
+    return
+  end
+  
+  if Andy.saved.enable.quietMode > 0 then
+    d('|cFF8800[Andy]|r Quiet mode disabled. You will see messages even when no flagged addons are found.')
+    Andy.saved.enable.quietMode = 0
+  else
+    d('|cFF8800[Andy]|r Quiet mode enabled. Messages will only appear when flagged addons are detected.')
+    Andy.saved.enable.quietMode = 1
   end
 end
 
@@ -170,6 +188,8 @@ function Andy.RuntimeOnLoad()
       Andy.SoundCommand()
     elseif command == "announce" then
       Andy.AnnounceCommand()
+    elseif command == "quiet" then
+      Andy.QuietCommand()
     else
       d('|cFF8800[Andy]|r Available commands:')
       d('  |cFFFFFF/andy scan|r - Manually scan for flagged addons')
@@ -177,6 +197,7 @@ function Andy.RuntimeOnLoad()
       d('  |cFFFFFF/andy monitor|r - Re-enable warnings (undo suppress)')
       d('  |cFFFFFF/andy sound|r - Toggle warning sound on/off')
       d('  |cFFFFFF/andy announce|r - Toggle center screen banner on/off')
+      d('  |cFFFFFF/andy quiet|r - Toggle quiet mode (only show messages when flagged addons are found)')
       d('  |cFFFFFF/andy debug|r - Enable debug mode (additional logging)')
     end
   end

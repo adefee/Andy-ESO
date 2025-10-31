@@ -262,7 +262,13 @@ function Andy.quickScanAllAddons(isManualScan)
   elseif #flaggedAddons > 0 and not shouldShowWarnings then
     Andy.debugLog('Warnings suppressed due to suppress mode Run /andy monitor to re-enable warnings.')
   else
-    d('|cFF8800[Andy]|r No flagged addons found - all clear!')
+    -- Only show "all clear" message if quiet mode is off
+    if not Andy.saved or not Andy.saved.enable or Andy.saved.enable.quietMode == 0 then
+      d('|cFF8800[Andy]|r No flagged addons found - all clear!')
+      if not isManualScan then
+        d('|cAAAAAATip: Use |cFFFFFF/andy quiet|r to suppress this message when no flagged addons are found.')
+      end
+    end
   end
   
   return flaggedAddons
