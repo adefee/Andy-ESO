@@ -99,6 +99,40 @@ function Andy.MonitorCommand()
   Andy.quickScanAllAddons()
 end
 
+-- SoundCommand()
+-- Slash command handler for /andy sound
+function Andy.SoundCommand()
+  if not Andy.saved or not Andy.saved.enable then
+    d('Andy: Error - saved variables not initialized yet.')
+    return
+  end
+  
+  if Andy.saved.enable.playSound > 0 then
+    d('|cFF8800[Andy]|r Warning sound disabled.')
+    Andy.saved.enable.playSound = 0
+  else
+    d('|cFF8800[Andy]|r Warning sound enabled.')
+    Andy.saved.enable.playSound = 1
+  end
+end
+
+-- AnnounceCommand()
+-- Slash command handler for /andy announce
+function Andy.AnnounceCommand()
+  if not Andy.saved or not Andy.saved.enable then
+    d('Andy: Error - saved variables not initialized yet.')
+    return
+  end
+  
+  if Andy.saved.enable.showBanner > 0 then
+    d('|cFF8800[Andy]|r Center screen banner disabled.')
+    Andy.saved.enable.showBanner = 0
+  else
+    d('|cFF8800[Andy]|r Center screen banner enabled.')
+    Andy.saved.enable.showBanner = 1
+  end
+end
+
 -- Runs only the first time load
 -- Specifically snake_case because it's a runtime function
 function Andy.FirstRun()
@@ -162,11 +196,17 @@ function Andy.RuntimeOnLoad()
       Andy.SuppressCommand()
     elseif command == "monitor" then
       Andy.MonitorCommand()
+    elseif command == "sound" then
+      Andy.SoundCommand()
+    elseif command == "announce" then
+      Andy.AnnounceCommand()
     else
       d('|cFF8800[Andy]|r Available commands:')
       d('  |cFFFFFF/andy scan|r - Manually scan for flagged addons')
       d('  |cFFFFFF/andy suppress|r - Suppress current warnings until new flagged addon is found, or Andy is updated')
       d('  |cFFFFFF/andy monitor|r - Re-enable warnings (undo suppress)')
+      d('  |cFFFFFF/andy sound|r - Toggle warning sound on/off')
+      d('  |cFFFFFF/andy announce|r - Toggle center screen banner on/off')
       d('  |cFFFFFF/andy debug|r - Enable debug mode (additional logging)')
     end
   end

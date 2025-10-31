@@ -32,6 +32,8 @@ AddonAnalyzer = {
     },
     enable = {
       autoScan = 1, -- Automatically scan on UI reload
+      playSound = 1, -- Play warning sound when flagged addons detected
+      showBanner = 1, -- Show center screen banner when flagged addons detected
     },
     internal = {
       lastUpdate = 0,

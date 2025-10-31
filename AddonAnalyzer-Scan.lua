@@ -203,12 +203,16 @@ function Andy.quickScanAllAddons(isManualScan)
   
   -- Log results to chat
   if #flaggedAddons > 0 and shouldShowWarnings then
-    -- Play warning sound
-    PlaySound(SOUNDS.DUEL_FORFEIT)
+    -- Play warning sound if enabled
+    if Andy.saved and Andy.saved.enable and Andy.saved.enable.playSound > 0 then
+      PlaySound(SOUNDS.DUEL_FORFEIT)
+    end
     
-    -- Show banner message
-    local bannerMessage = "AddonAnalyzer: " .. #flaggedAddons .. " Flagged Addon" .. (#flaggedAddons > 1 and "s" or "") .. " Detected!"
-    CENTER_SCREEN_ANNOUNCE:AddMessage(0, CSA_CATEGORY_LARGE_TEXT, SOUNDS.NONE, bannerMessage)
+    -- Show banner message if enabled
+    if Andy.saved and Andy.saved.enable and Andy.saved.enable.showBanner > 0 then
+      local bannerMessage = "AddonAnalyzer: " .. #flaggedAddons .. " Flagged Addon" .. (#flaggedAddons > 1 and "s" or "") .. " Detected!"
+      CENTER_SCREEN_ANNOUNCE:AddMessage(0, CSA_CATEGORY_LARGE_TEXT, SOUNDS.NONE, bannerMessage)
+    end
     
     -- Show reason for alert if coming out of suppress mode
     if #newAddonsFound > 0 or versionChanged then
