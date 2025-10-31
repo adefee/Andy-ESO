@@ -43,9 +43,9 @@ jobs:
       - name: Verify build output
         run: |
           VERSION=${{ steps.package-version.outputs.version }}
-          if [ -f "dist/$VERSION/joker-$VERSION.zip" ]; then
-            echo "✓ Build artifact found: dist/$VERSION/joker-$VERSION.zip"
-            ls -lh "dist/$VERSION/joker-$VERSION.zip"
+          if [ -f "dist/$VERSION/andy-$VERSION.zip" ]; then
+            echo "✓ Build artifact found: dist/$VERSION/andy-$VERSION.zip"
+            ls -lh "dist/$VERSION/andy-$VERSION.zip"
           else
             echo "❌ Build artifact not found!"
             exit 1
@@ -54,8 +54,8 @@ jobs:
       - name: Upload build artifact
         uses: actions/upload-artifact@v4
         with:
-          name: joker-${{ steps.package-version.outputs.version }}
-          path: dist/${{ steps.package-version.outputs.version }}/joker-${{ steps.package-version.outputs.version }}.zip
+          name: andy-${{ steps.package-version.outputs.version }}
+          path: dist/${{ steps.package-version.outputs.version }}/andy-${{ steps.package-version.outputs.version }}.zip
           retention-days: 90
   
   release:
@@ -83,17 +83,17 @@ jobs:
           echo "version=$VERSION" >> $GITHUB_OUTPUT
           echo "Version: $VERSION"
       
-      - name: Get addon version from Joker.txt
+      - name: Get addon version from Andy.txt
         id: addon-version
         run: |
-          ADDON_VERSION=$(grep "^## AddOnVersion:" Joker.txt | awk '{print $3}')
+          ADDON_VERSION=$(grep "^## AddOnVersion:" Andy.txt | awk '{print $3}')
           echo "addon_version=$ADDON_VERSION" >> $GITHUB_OUTPUT
           echo "Addon Version: $ADDON_VERSION"
       
       - name: Download build artifact
         uses: actions/download-artifact@v4
         with:
-          name: joker-${{ steps.package-version.outputs.version }}
+          name: andy-${{ steps.package-version.outputs.version }}
           path: ./release
       
       - name: Verify downloaded artifact
@@ -105,14 +105,14 @@ jobs:
         id: release-notes
         run: |
           cat > release_notes.md << 'EOF'
-          ## Joker ESO Addon v${{ steps.package-version.outputs.version }}
+          ## Andy - ESO Addon Analyzer v${{ steps.package-version.outputs.version }}
           
           **Version:** ${{ steps.package-version.outputs.version }}  
           **Addon Version:** ${{ steps.addon-version.outputs.addon_version }}
           
           ### Installation
           
-          1. Download `joker-${{ steps.package-version.outputs.version }}.zip`
+          1. Download `andy-${{ steps.package-version.outputs.version }}.zip`
           2. Extract the contents to your ESO AddOns folder:
              - **Windows:** `Documents\Elder Scrolls Online\live\AddOns\`
              - **Mac:** `~/Documents/Elder Scrolls Online/live/AddOns/`
@@ -143,10 +143,10 @@ jobs:
         uses: softprops/action-gh-release@v2
         with:
           tag_name: ${{ steps.tag-name.outputs.tag }}
-          name: Joker v${{ steps.package-version.outputs.version }}
+          name: Andy - ESO Addon Analyzer v${{ steps.package-version.outputs.version }}
           body_path: release_notes.md
           files: |
-            ./release/joker-${{ steps.package-version.outputs.version }}.zip
+            ./release/andy-${{ steps.package-version.outputs.version }}.zip
           draft: false
           prerelease: false
         env:
