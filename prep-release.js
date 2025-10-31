@@ -241,7 +241,7 @@ function updateReadme(version) {
  */
 function commitChanges(version) {
   try {
-    execSync('git add package.json AddonAnalyzer.txt variables.lua README.md', { stdio: 'inherit' });
+    execSync('git add package.json Andy.txt AndyVariables.lua README.md', { stdio: 'inherit' });
     execSync(`git commit -m "Bump version to ${version}"`, { stdio: 'inherit' });
     log.success(`Committed version changes: "Bump version to ${version}"`);
   } catch (error) {
