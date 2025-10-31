@@ -305,6 +305,34 @@
             margin-left: 0.5rem;
         }
 
+        /* Download Button */
+        .download-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 1rem 2rem;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+            color: #fff;
+            text-decoration: none;
+            border-radius: var(--radius-md);
+            font-weight: 600;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(255, 136, 0, 0.3);
+            margin-bottom: 2rem;
+        }
+
+        .download-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(255, 136, 0, 0.5);
+        }
+
+        .download-button svg {
+            width: 20px;
+            height: 20px;
+            fill: currentColor;
+        }
+
         /* Filter Controls */
         .filter-controls {
             display: flex;
@@ -913,6 +941,7 @@
                 Menu
             </button>
             <nav id="navMenu">
+                <a href="https://github.com/adefee/Andy-ESO/releases" target="_blank">Download</a>
                 <a href="#about">About</a>
                 <a href="#watchlist">Browse Flagged</a>
                 <a href="#audited">Audits</a>
@@ -930,7 +959,13 @@
             <p class="section-description">
                 Andy (Addon Analyzer) is an Elder Scrolls Online addon that helps protect the community by identifying malicious, stolen, paywalled, or ToS/EULA-violating addons. It monitors your installed addons and alerts you if any match our watchlist of flagged content.
             </p>
-            <p>Andy is not yet published on ESOUI or Bethesda's Addon directory. You can download the latest release from the <a href="https://github.com/adefee/Andy-ESO/releases" target="_blank">GitHub Releases page</a>.</p>
+            
+            <a href="https://www.esoui.com/downloads/info4293-Andy-Checksaddonsforknownmaliciousstolenandotherflaggedcontent.html" target="_blank" rel="noopener noreferrer" class="download-button">
+                <svg viewBox="0 0 24 24">
+                    <path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/>
+                </svg>
+                Download from ESOUI
+            </a>
             
             <div class="feature-grid">
                 <div class="feature-card">
