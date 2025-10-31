@@ -140,9 +140,10 @@ end
 
 -- quickScanAllAddons()
 -- Called on UI load, gets list of addons and scans each against AddonWatchlistDb
-function Andy.quickScanAllAddons()
+-- @param isManualScan (boolean, optional) - If true, bypass suppress settings and show all results
+function Andy.quickScanAllAddons(isManualScan)
   local currentPlatform = AndyUtil.getPlatform()
-  Andy.debugLog('Running quickScanAllAddons() on platform: ' .. currentPlatform)
+  Andy.debugLog('Running quickScanAllAddons() on platform: ' .. currentPlatform .. (isManualScan and ' (manual scan)' or ''))
   
   -- Get all installed addons
   local installedAddons = Andy.getInstalledAddons()
@@ -161,7 +162,11 @@ function Andy.quickScanAllAddons()
   local newAddonsFound = {}
   local versionChanged = false
   
-  if Andy.saved and Andy.saved.ignore and Andy.saved.ignore.enabled then
+  -- Manual scans always show warnings, regardless of suppress settings
+  if isManualScan then
+    Andy.debugLog('Manual scan requested - bypassing suppress settings')
+    shouldShowWarnings = true
+  elseif Andy.saved and Andy.saved.ignore and Andy.saved.ignore.enabled then
     Andy.debugLog('Suppress mode is enabled, checking for new addons or version changes...')
     
     -- Check if version has changed
@@ -185,14 +190,15 @@ function Andy.quickScanAllAddons()
       end
     end
     
-    -- Determine if we should show warnings
-    if #newAddonsFound == 0 and not versionChanged then
-      shouldShowWarnings = false
-      Andy.debugLog('No new addons found and version unchanged. Warnings suppressed.')
-    else
-      -- Auto re-enable monitoring if version changed or new addons found
-      Andy.saved.ignore.enabled = false
-      Andy.debugLog('New conditions detected. Re-enabling monitoring.')
+      -- Determine if we should show warnings
+      if #newAddonsFound == 0 and not versionChanged then
+        shouldShowWarnings = false
+        Andy.debugLog('No new addons found and version unchanged. Warnings suppressed.')
+      else
+        -- Auto re-enable monitoring if version changed or new addons found
+        Andy.saved.ignore.enabled = false
+        Andy.debugLog('New conditions detected. Re-enabling monitoring.')
+      end
     end
   end
   
@@ -239,7 +245,9 @@ function Andy.quickScanAllAddons()
     end
     
     d('|cFFFF00Please review these addons and consider removing them.|r')
-    d('|cAAAAAATip: Use |cFFFFFF/andy suppress|r to suppress warnings until a new flagged addon is detected.|r')
+    if not isManualScan then
+      d('|cAAAAAATip: Use |cFFFFFF/andy suppress|r to suppress warnings until a new flagged addon is detected.|r')
+    end
   elseif #flaggedAddons > 0 and not shouldShowWarnings then
     Andy.debugLog('Warnings suppressed due to suppress mode.')
   else

@@ -44,7 +44,7 @@ end
 -- Slash command handler for /andy scan
 function Andy.ScanCommand()
   d('|cFF8800[AddonAnalyzer]|r Running manual scan...')
-  Andy.quickScanAllAddons()
+  Andy.quickScanAllAddons(true) -- Pass true to indicate manual/on-demand scan
 end
 
 -- SuppressCommand()
@@ -164,10 +164,11 @@ function Andy.RuntimeOnLoad()
     elseif command == "monitor" then
       Andy.MonitorCommand()
     else
-      d('|cFF8800[AddonAnalyzer]|r Available commands:')
+      d('|cFF8800[Andy]|r Available commands:')
       d('  |cFFFFFF/andy scan|r - Manually scan for flagged addons')
-      d('  |cFFFFFF/andy suppress|r - Suppress current warnings until new addon found or addon updated')
+      d('  |cFFFFFF/andy suppress|r - Suppress current warnings until new flagged addon is found, or Andy is updated')
       d('  |cFFFFFF/andy monitor|r - Re-enable warnings (undo suppress)')
+      d('  |cFFFFFF/andy debug|r - Enable debug mode (additional logging)')
     end
   end
 end
