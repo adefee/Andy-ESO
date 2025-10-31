@@ -191,14 +191,13 @@ function Andy.quickScanAllAddons(isManualScan)
     end
     
       -- Determine if we should show warnings
-      if #newAddonsFound == 0 and not versionChanged then
-        shouldShowWarnings = false
-        Andy.debugLog('No new addons found and version unchanged. Warnings suppressed.')
-      else
-        -- Auto re-enable monitoring if version changed or new addons found
-        Andy.saved.ignore.enabled = false
-        Andy.debugLog('New conditions detected. Re-enabling monitoring.')
-      end
+    if #newAddonsFound == 0 and not versionChanged then
+      shouldShowWarnings = false
+      Andy.debugLog('No new addons found and version unchanged. Warnings suppressed.')
+    else
+      -- Auto re-enable monitoring if version changed or new addons found
+      Andy.saved.ignore.enabled = false
+      Andy.debugLog('New conditions detected. Re-enabling monitoring.')
     end
   end
   
@@ -216,7 +215,7 @@ function Andy.quickScanAllAddons(isManualScan)
       d('|cFF0000[AddonAnalyzer WARNING]|r Alert triggered: ' .. table.concat(reasons, ' and '))
     end
     
-    d('|cFF0000[AddonAnalyzer WARNING]|r Found ' .. #flaggedAddons .. ' flagged addon(s):')
+    d('|cFF0000[WARNING]|r Andy Found ' .. #flaggedAddons .. ' flagged addon(s):')
     
     for _, result in ipairs(flaggedAddons) do
       local reasonLabel = Andy.ReasonLabels[result.reason] or result.reason
@@ -249,7 +248,7 @@ function Andy.quickScanAllAddons(isManualScan)
       d('|cAAAAAATip: Use |cFFFFFF/andy suppress|r to suppress warnings until a new flagged addon is detected.|r')
     end
   elseif #flaggedAddons > 0 and not shouldShowWarnings then
-    Andy.debugLog('Warnings suppressed due to suppress mode.')
+    Andy.debugLog('Warnings suppressed due to suppress mode Run /andy monitor to re-enable warnings.')
   else
     Andy.debugLog('No flagged addons found - all clear!')
   end
