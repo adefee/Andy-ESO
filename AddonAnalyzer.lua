@@ -153,11 +153,12 @@ function Andy.RuntimeOnLoad()
   --[[
     Add our Slash commands
   ]]
-  SLASH_COMMANDS["/_andy-debug"] = function () Andy.ToggleDebug() end
   SLASH_COMMANDS["/andy"] = function(args)
     local command = string.lower(args or "")
     if command == "scan" then
       Andy.ScanCommand()
+    elseif command == "debug" then
+      Andy.ToggleDebug()
     elseif command == "ignore" then
       Andy.IgnoreCommand()
     elseif command == "monitor" then

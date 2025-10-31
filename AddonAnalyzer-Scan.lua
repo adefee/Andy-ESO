@@ -116,7 +116,7 @@ function Andy.scanSingleAddon(addonData)
           return nil
         end
         
-        Andy.debugLog('Author match found: "' .. normalizedWatchlistAuthor .. '" in "' .. normalizedAuthor .. '"')
+        Andy.debugLog('Author match found in addon "' .. addonData.name .. '": "' .. normalizedWatchlistAuthor .. '" in "' .. normalizedAuthor .. '"')
         
         -- Found a flagged author!
         return {
