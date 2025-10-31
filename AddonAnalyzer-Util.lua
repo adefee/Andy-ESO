@@ -124,6 +124,31 @@ function AndyUtil.normalizeAddonName(name)
   return string.lower(string.gsub(name, "^%s*(.-)%s*$", "%1"))
 end
 
+-- normalizeAuthorName
+-- Util: Attempts to normalize author names for comparison
+function AndyUtil.normalizeAuthorName(author)
+  if not author then return "" end
+  return string.lower(string.gsub(author, "^%s*(.-)%s*$", "%1"))
+end
+
+-- getPlatform
+-- Util: Returns the current platform ("pc" or "console")
+function AndyUtil.getPlatform()
+  return IsConsoleUI() and "console" or "pc"
+end
+
+-- isPlatformMatch
+-- Util: Checks if a watchlist entry's platform matches the current platform
+-- Accepts: "pc", "console", "both", or nil (defaults to "both")
+function AndyUtil.isPlatformMatch(watchlistPlatform)
+  if not watchlistPlatform or watchlistPlatform == "both" then
+    return true
+  end
+  
+  local currentPlatform = AndyUtil.getPlatform()
+  return watchlistPlatform == currentPlatform
+end
+
 -- runPeriodicEvents()
 -- Data; Determines if a specific periodic event is due to occur
 function AndyUtil.runPeriodicEvents(target, callbacks, skipIncrement)

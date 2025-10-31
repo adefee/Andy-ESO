@@ -47,7 +47,7 @@ function Andy.getInstalledAddons()
 end
 
 -- scanSingleAddon()
--- Given a single addon, see if it's in our AddonWatchlistDb
+-- Given a single addon, see if it's in our AddonWatchlistDb or AuthorWatchlistDb
 function Andy.scanSingleAddon(addonData)
   if not addonData or not addonData.name then
     return nil
@@ -56,21 +56,29 @@ function Andy.scanSingleAddon(addonData)
   -- Normalize the addon name for case-insensitive comparison
   local normalizedName = AndyUtil.normalizeAddonName(addonData.name)
   
-  -- Check against watchlist
+  -- First, check against addon watchlist
   for watchlistAddonName, watchlistInfo in pairs(Andy.AddonWatchlistDb) do
     local normalizedWatchlistName = AndyUtil.normalizeAddonName(watchlistAddonName)
     
     if normalizedName == normalizedWatchlistName then
+      -- Check if this entry is for the current platform
+      if not AndyUtil.isPlatformMatch(watchlistInfo.platform) then
+        Andy.debugLog('Skipping ' .. addonData.name .. ' - platform mismatch')
+        return nil
+      end
+      
       -- Found a match! Now check version
       if watchlistInfo.allVersions then
         -- All versions are flagged
         return {
           found = true,
+          flaggedBy = "addon",
           addonName = addonData.name,
           version = addonData.version,
           reason = watchlistInfo.reason,
           description = watchlistInfo.description,
-          reportedDate = watchlistInfo.reportedDate
+          reportedDate = watchlistInfo.reportedDate,
+          platform = watchlistInfo.platform
         }
       elseif watchlistInfo.versions and addonData.version then
         -- Check if this specific version is flagged
@@ -78,14 +86,50 @@ function Andy.scanSingleAddon(addonData)
           if addonData.version == badVersion then
             return {
               found = true,
+              flaggedBy = "addon",
               addonName = addonData.name,
               version = addonData.version,
               reason = watchlistInfo.reason,
               description = watchlistInfo.description,
-              reportedDate = watchlistInfo.reportedDate
+              reportedDate = watchlistInfo.reportedDate,
+              platform = watchlistInfo.platform
             }
           end
         end
+      end
+    end
+  end
+  
+  -- Second, check against author watchlist
+  if addonData.author then
+    local normalizedAuthor = AndyUtil.normalizeAuthorName(addonData.author)
+    
+    for watchlistAuthor, watchlistInfo in pairs(Andy.AuthorWatchlistDb) do
+      local normalizedWatchlistAuthor = AndyUtil.normalizeAuthorName(watchlistAuthor)
+      
+      -- Check if the watchlist author appears anywhere in the addon author string
+      -- This catches variations like "@UserName", "by UserName", "[UserName]", etc.
+      if normalizedWatchlistAuthor ~= "" and string.find(normalizedAuthor, normalizedWatchlistAuthor, 1, true) then
+        -- Check if this entry is for the current platform
+        if not AndyUtil.isPlatformMatch(watchlistInfo.platform) then
+          Andy.debugLog('Skipping author ' .. addonData.author .. ' - platform mismatch')
+          return nil
+        end
+        
+        Andy.debugLog('Author match found: "' .. normalizedWatchlistAuthor .. '" in "' .. normalizedAuthor .. '"')
+        
+        -- Found a flagged author!
+        return {
+          found = true,
+          flaggedBy = "author",
+          addonName = addonData.name,
+          author = addonData.author,
+          version = addonData.version,
+          reason = watchlistInfo.reason,
+          description = watchlistInfo.description,
+          reportedDate = watchlistInfo.reportedDate,
+          platform = watchlistInfo.platform
+        }
       end
     end
   end
@@ -97,7 +141,8 @@ end
 -- quickScanAllAddons()
 -- Called on UI load, gets list of addons and scans each against AddonWatchlistDb
 function Andy.quickScanAllAddons()
-  Andy.debugLog('Running quickScanAllAddons()')
+  local currentPlatform = AndyUtil.getPlatform()
+  Andy.debugLog('Running quickScanAllAddons() on platform: ' .. currentPlatform)
   
   -- Get all installed addons
   local installedAddons = Andy.getInstalledAddons()
@@ -119,7 +164,13 @@ function Andy.quickScanAllAddons()
       local reasonLabel = Andy.ReasonLabels[result.reason] or result.reason
       local versionText = result.version and (' v' .. result.version) or ''
       
-      d('  |cFF8800' .. result.addonName .. versionText .. '|r - Flagged as: ' .. reasonLabel)
+      if result.flaggedBy == "author" then
+        -- Flagged by author
+        d('  |cFF8800' .. result.addonName .. versionText .. '|r - Flagged author: |cFF4444' .. (result.author or "Unknown") .. '|r (' .. reasonLabel .. ')')
+      else
+        -- Flagged by addon name
+        d('  |cFF8800' .. result.addonName .. versionText .. '|r - Flagged as: ' .. reasonLabel)
+      end
       
       if result.description then
         d('    ' .. result.description)
