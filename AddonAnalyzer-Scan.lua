@@ -156,20 +156,81 @@ function Andy.quickScanAllAddons()
     end
   end
   
+  -- Check if we should suppress warnings based on ignore settings
+  local shouldShowWarnings = true
+  local newAddonsFound = {}
+  local versionChanged = false
+  
+  if Andy.saved and Andy.saved.ignore and Andy.saved.ignore.enabled then
+    Andy.debugLog('Ignore mode is enabled, checking for new addons or version changes...')
+    
+    -- Check if version has changed
+    if Andy.saved.ignore.versionWhenIgnored and Andy.versionESO ~= Andy.saved.ignore.versionWhenIgnored then
+      versionChanged = true
+      Andy.debugLog('Version changed from ' .. Andy.saved.ignore.versionWhenIgnored .. ' to ' .. Andy.versionESO)
+    end
+    
+    -- Check for new flagged addons not in the ignored list
+    for _, result in ipairs(flaggedAddons) do
+      local wasIgnored = false
+      for _, ignoredAddon in ipairs(Andy.saved.ignore.flaggedAddons) do
+        if result.addonName == ignoredAddon then
+          wasIgnored = true
+          break
+        end
+      end
+      
+      if not wasIgnored then
+        table.insert(newAddonsFound, result)
+      end
+    end
+    
+    -- Determine if we should show warnings
+    if #newAddonsFound == 0 and not versionChanged then
+      shouldShowWarnings = false
+      Andy.debugLog('No new addons found and version unchanged. Suppressing warnings.')
+    else
+      -- Auto re-enable monitoring if version changed or new addons found
+      Andy.saved.ignore.enabled = false
+      Andy.debugLog('New conditions detected. Re-enabling monitoring.')
+    end
+  end
+  
   -- Log results to chat
-  if #flaggedAddons > 0 then
+  if #flaggedAddons > 0 and shouldShowWarnings then
+    -- Show reason for alert if coming out of ignore mode
+    if #newAddonsFound > 0 or versionChanged then
+      local reasons = {}
+      if #newAddonsFound > 0 then
+        table.insert(reasons, #newAddonsFound .. ' new flagged addon(s) detected')
+      end
+      if versionChanged then
+        table.insert(reasons, 'AddonAnalyzer was updated')
+      end
+      d('|cFF0000[AddonAnalyzer WARNING]|r Alert triggered: ' .. table.concat(reasons, ' and '))
+    end
+    
     d('|cFF0000[AddonAnalyzer WARNING]|r Found ' .. #flaggedAddons .. ' flagged addon(s):')
     
     for _, result in ipairs(flaggedAddons) do
       local reasonLabel = Andy.ReasonLabels[result.reason] or result.reason
       local versionText = result.version and (' v' .. result.version) or ''
       
+      -- Mark new addons with an indicator
+      local newIndicator = ""
+      for _, newAddon in ipairs(newAddonsFound) do
+        if newAddon.addonName == result.addonName then
+          newIndicator = " |cFF0000[NEW]|r"
+          break
+        end
+      end
+      
       if result.flaggedBy == "author" then
         -- Flagged by author
-        d('  |cFF8800' .. result.addonName .. versionText .. '|r - Flagged author: |cFF4444' .. (result.author or "Unknown") .. '|r (' .. reasonLabel .. ')')
+        d('  |cFF8800' .. result.addonName .. versionText .. '|r' .. newIndicator .. ' - Flagged author: |cFF4444' .. (result.author or "Unknown") .. '|r (' .. reasonLabel .. ')')
       else
         -- Flagged by addon name
-        d('  |cFF8800' .. result.addonName .. versionText .. '|r - Flagged as: ' .. reasonLabel)
+        d('  |cFF8800' .. result.addonName .. versionText .. '|r' .. newIndicator .. ' - Flagged as: ' .. reasonLabel)
       end
       
       if result.description then
@@ -178,6 +239,9 @@ function Andy.quickScanAllAddons()
     end
     
     d('|cFFFF00Please review these addons and consider removing them.|r')
+    d('|cAAAAAATip: Use |cFFFFFF/andy ignore|r to suppress warnings until a new flagged addon is detected.|r')
+  elseif #flaggedAddons > 0 and not shouldShowWarnings then
+    Andy.debugLog('Warnings suppressed due to ignore mode.')
   else
     Andy.debugLog('No flagged addons found - all clear!')
   end

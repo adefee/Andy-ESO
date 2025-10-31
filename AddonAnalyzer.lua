@@ -24,7 +24,7 @@ function Andy.debugLog(message)
   end
 end
 
--- Joker.ToggleDebug()
+-- ToggleDebug()
 function Andy.ToggleDebug()
   if not Andy.saved or not Andy.saved.internal then
     d('Andy: Error - saved variables not initialized yet.')
@@ -38,6 +38,66 @@ function Andy.ToggleDebug()
     d('Enabling Andy debug mode.')
     Andy.saved.internal.showDebug = 1
   end
+end
+
+-- ScanCommand()
+-- Slash command handler for /andy scan
+function Andy.ScanCommand()
+  d('|cFF8800[AddonAnalyzer]|r Running manual scan...')
+  Andy.quickScanAllAddons()
+end
+
+-- IgnoreCommand()
+-- Slash command handler for /andy ignore
+function Andy.IgnoreCommand()
+  if not Andy.saved or not Andy.saved.ignore then
+    d('Andy: Error - saved variables not initialized yet.')
+    return
+  end
+  
+  -- Run a scan to get current flagged addons
+  local flaggedAddons = Andy.quickScanAllAddons()
+  
+  if #flaggedAddons == 0 then
+    d('|cFF8800[AddonAnalyzer]|r No flagged addons found. Nothing to ignore.')
+    return
+  end
+  
+  -- Store the flagged addons and current version
+  Andy.saved.ignore.enabled = true
+  Andy.saved.ignore.versionWhenIgnored = Andy.versionESO
+  Andy.saved.ignore.flaggedAddons = {}
+  
+  for _, result in ipairs(flaggedAddons) do
+    table.insert(Andy.saved.ignore.flaggedAddons, result.addonName)
+  end
+  
+  d('|cFF8800[AddonAnalyzer]|r Ignoring ' .. #flaggedAddons .. ' flagged addon(s). Warnings will be suppressed until a new flagged addon is detected or AddonAnalyzer is updated.')
+  Andy.debugLog('Ignored addons: ' .. table.concat(Andy.saved.ignore.flaggedAddons, ', '))
+end
+
+-- MonitorCommand()
+-- Slash command handler for /andy monitor
+function Andy.MonitorCommand()
+  if not Andy.saved or not Andy.saved.ignore then
+    d('Andy: Error - saved variables not initialized yet.')
+    return
+  end
+  
+  if not Andy.saved.ignore.enabled then
+    d('|cFF8800[AddonAnalyzer]|r Monitoring is already enabled.')
+    return
+  end
+  
+  -- Clear ignore state
+  Andy.saved.ignore.enabled = false
+  Andy.saved.ignore.versionWhenIgnored = nil
+  Andy.saved.ignore.flaggedAddons = {}
+  
+  d('|cFF8800[AddonAnalyzer]|r Monitoring re-enabled. You will now receive all warnings.')
+  
+  -- Run a scan to show current state
+  Andy.quickScanAllAddons()
 end
 
 -- Runs only the first time load
@@ -94,6 +154,21 @@ function Andy.RuntimeOnLoad()
     Add our Slash commands
   ]]
   SLASH_COMMANDS["/_andy-debug"] = function () Andy.ToggleDebug() end
+  SLASH_COMMANDS["/andy"] = function(args)
+    local command = string.lower(args or "")
+    if command == "scan" then
+      Andy.ScanCommand()
+    elseif command == "ignore" then
+      Andy.IgnoreCommand()
+    elseif command == "monitor" then
+      Andy.MonitorCommand()
+    else
+      d('|cFF8800[AddonAnalyzer]|r Available commands:')
+      d('  |cFFFFFF/andy scan|r - Manually scan for flagged addons')
+      d('  |cFFFFFF/andy ignore|r - Ignore current warnings until new addon found or addon updated')
+      d('  |cFFFFFF/andy monitor|r - Re-enable warnings (undo ignore)')
+    end
+  end
 end
 
 -- Intended to run each time `EVENT_PLAYER_ACTIVATED` fires
