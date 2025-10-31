@@ -255,7 +255,12 @@
             color: var(--warning-color);
         }
 
-        .reason-community {
+        .reason-paywall {
+            background: rgba(241, 196, 15, 0.1);
+            color: #F1C40F;
+        }
+
+        .reason-tos_eula {
             background: rgba(155, 89, 182, 0.1);
             color: #9B59B6;
         }
@@ -466,7 +471,8 @@
                 <button class="filter-btn" data-filter="author">Authors</button>
                 <button class="filter-btn" data-filter="malicious">Malicious</button>
                 <button class="filter-btn" data-filter="stolen">Stolen</button>
-                <button class="filter-btn" data-filter="community">Community Reported</button>
+                <button class="filter-btn" data-filter="paywall">Paywall</button>
+                <button class="filter-btn" data-filter="tos_eula">ToS/EULA</button>
                 <input type="text" class="search-box" id="searchBox" placeholder="Search addons or authors...">
             </div>
 
@@ -513,7 +519,8 @@
         const reasonLabels = {
             malicious: "Malicious",
             stolen: "Stolen Content",
-            community_reported: "Community Reported"
+            paywall: "Paywall",
+            tos_eula: "ToS/EULA Violation"
         };
 
         function renderWatchlist(filter = 'all', searchTerm = '') {
@@ -540,7 +547,8 @@
                     if (filter === 'author' && item.type !== 'author') return false;
                     if (filter === 'malicious' && item.reason !== 'malicious') return false;
                     if (filter === 'stolen' && item.reason !== 'stolen') return false;
-                    if (filter === 'community' && item.reason !== 'community_reported') return false;
+                    if (filter === 'paywall' && item.reason !== 'paywall') return false;
+                    if (filter === 'tos_eula' && item.reason !== 'tos_eula') return false;
                 }
                 
                 // Search filter
@@ -567,7 +575,8 @@
             
             items.forEach(item => {
                 const reasonClass = item.reason === 'malicious' ? 'reason-malicious' : 
-                                   item.reason === 'stolen' ? 'reason-stolen' : 'reason-community';
+                                   item.reason === 'stolen' ? 'reason-stolen' : 
+                                   item.reason === 'paywall' ? 'reason-paywall' : 'reason-tos_eula';
                 
                 const platform = item.platform || 'both';
                 const platformDisplay = platform === 'both' ? 'PC & Console' : 
@@ -588,6 +597,12 @@
                     </div>
                     <div class="watchlist-description">${item.description}</div>
                     <div class="watchlist-meta">
+                        ${item.author ? `
+                        <div class="meta-item">
+                            <span>👤</span>
+                            <span>Author: ${item.author}</span>
+                        </div>
+                        ` : ''}
                         <div class="meta-item">
                             <span>📅</span>
                             <span>Reported: ${item.reportedDate}</span>

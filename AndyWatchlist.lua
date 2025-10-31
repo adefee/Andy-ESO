@@ -20,11 +20,13 @@ Andy = Andy or {}
 -- Key: Addon name (case-insensitive matching will be used)
 -- Value: Table with reason and optional version info
 -- Platform field: "pc", "console", "both", or nil (nil defaults to "both")
+-- Author field: Optional author name for display purposes
 Andy.AddonWatchlistDb = {
     -- Example entries (you can add real ones as they're reported)
     ["LibText"] = {
         reason = "malicious",
         description = "This addon has a denylist that silently blocks some players' messages, market postings, etc.",
+        author = "TheStylishIrish",
         allVersions = true, -- If true, all versions are bad
         platform = "console",
         reportedDate = "2025-10-27"
@@ -32,22 +34,24 @@ Andy.AddonWatchlistDb = {
     -- ["StolenContentAddon"] = {
     --     reason = "stolen",
     --     description = "Stolen from OriginalAddon by OriginalAuthor",
+    --     author = "ThiefName", -- Optional
     --     versions = {"1.0.0", "1.0.1"}, -- Specific bad versions
     --     platform = "pc", -- Only on PC
     --     reportedDate = "2024-09-20"
     -- },
-    -- ["ConsoleOnlyBadAddon"] = {
-    --     reason = "malicious",
-    --     description = "Console-specific malicious addon",
+    -- ["PaywallAddon"] = {
+    --     reason = "paywall",
+    --     description = "Locks features behind payment in violation of addon guidelines",
+    --     author = "AuthorName", -- Optional
     --     allVersions = true,
-    --     platform = "console", -- Only on Console
+    --     platform = "both",
     --     reportedDate = "2024-08-10"
     -- },
-    -- ["CommunityReported"] = {
-    --     reason = "community_reported",
-    --     description = "Multiple reports of game crashes and performance issues",
+    -- ["ToSViolatingAddon"] = {
+    --     reason = "tos_eula",
+    --     description = "Circumvents game protections or violates Terms of Service",
     --     allVersions = true,
-    --     -- platform not specified defaults to "both"
+    --     platform = "both",
     --     reportedDate = "2024-08-10"
     -- }
 }
@@ -58,6 +62,7 @@ Andy.AddonWatchlistDb = {
 --      Examples: "Foo" will match "@Foo", "by Foo", "[Foo]", "Foo and Bar", etc.
 -- Value: Table with reason and description
 -- Platform field: "pc", "console", "both", or nil (nil defaults to "both")
+-- Reason options: "malicious", "stolen", "paywall", "tos_eula"
 Andy.AuthorWatchlistDb = {
     -- Example entries (you can add real ones as they're reported)
     ["TheStylishIrish"] = {
@@ -70,7 +75,13 @@ Andy.AuthorWatchlistDb = {
     --     reason = "stolen",
     --     description = "Steals and republishes other developers' work",
     --     platform = "pc",
-    --     reportedDate = "2024-09-15"
+    --     reportedDate: "2024-09-15"
+    -- },
+    -- ["PaywallAuthor"] = {
+    --     reason = "paywall",
+    --     description = "Creates addons with paywalled features",
+    --     platform = "both",
+    --     reportedDate = "2024-07-01"
     -- }
 }
 
@@ -78,5 +89,6 @@ Andy.AuthorWatchlistDb = {
 Andy.ReasonLabels = {
     malicious = "malicious",
     stolen = "stolen content",
-    community_reported = "community-reported as problematic"
+    paywall = "paywall",
+    tos_eula = "ToS/EULA violation"
 }

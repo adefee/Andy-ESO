@@ -39,6 +39,7 @@ function parseLuaWatchlist(luaContent) {
             // Parse fields
             const reasonMatch = content.match(/reason\s*=\s*"([^"]+)"/);
             const descMatch = content.match(/description\s*=\s*"([^"]+)"/);
+            const authorMatch = content.match(/author\s*=\s*"([^"]+)"/);
             const allVersionsMatch = content.match(/allVersions\s*=\s*(true|false)/);
             const versionsMatch = content.match(/versions\s*=\s*{([^}]+)}/);
             const platformMatch = content.match(/platform\s*=\s*"([^"]+)"/);
@@ -51,6 +52,11 @@ function parseLuaWatchlist(luaContent) {
                 platform: platformMatch ? platformMatch[1] : 'both',
                 reportedDate: dateMatch ? dateMatch[1] : ''
             };
+            
+            // Add optional author field
+            if (authorMatch) {
+                watchlistData.addons[name].author = authorMatch[1];
+            }
             
             if (versionsMatch) {
                 const versions = versionsMatch[1]

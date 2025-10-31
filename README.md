@@ -32,8 +32,9 @@ The addon maintains two databases in `AndyWatchlist.lua`:
 ### Flagged Addons
 ```lua
 Andy.AddonWatchlistDb["AddonName"] = {
-    reason = "malicious",  -- Options: "malicious", "stolen", "community_reported"
+    reason = "malicious",  -- Options: "malicious", "stolen", "paywall", "tos_eula"
     description = "Detailed description of the issue",
+    author = "AuthorName", -- Optional: author name for display
     allVersions = true,    -- Set to true if all versions are problematic
     -- OR
     versions = {"1.0.0", "1.0.1"},  -- List specific problematic versions
@@ -45,12 +46,18 @@ Andy.AddonWatchlistDb["AddonName"] = {
 ### Flagged Authors
 ```lua
 Andy.AuthorWatchlistDb["AuthorName"] = {
-    reason = "malicious",  -- Options: "malicious", "stolen", "community_reported"
+    reason = "malicious",  -- Options: "malicious", "stolen", "paywall", "tos_eula"
     description = "Description of why this author is flagged",
     platform = "console",  -- Options: "pc", "console", "both" (or nil defaults to "both")
     reportedDate = "2025-10-27"
 }
 ```
+
+**Reason Categories:**
+- **malicious** - Addons/authors with harmful intent
+- **stolen** - Stolen or plagiarized content
+- **paywall** - Locks features behind payment in violation of addon guidelines
+- **tos_eula** - Violates Terms of Service or EULA (e.g., circumvents game protections)
 
 ## Website
 
@@ -73,8 +80,9 @@ The website automatically updates whenever changes are pushed to `AndyWatchlist.
 
 If you know of an addon that should be added to the database, please submit an issue or pull request with:
 - Addon name or author name
+- Author of addon (optional, for addon entries)
 - Version(s) affected (for addons)
-- Reason (malicious/stolen/community_reported)
+- Reason (malicious/stolen/paywall/tos_eula)
 - Description of the issue
 - Platform (pc/console/both)
 - Evidence or source of the report
