@@ -16,3 +16,4 @@ desktop.ini
 *.sublime-*
 
 node_modules/
+dist/

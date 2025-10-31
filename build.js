@@ -70,7 +70,7 @@ function shouldInclude(itemPath) {
  * Includes only runtime-essential files:
  * - *.lua files (addon code)
  * - *.xml files (UI definitions)
- * - AddonAnalyzer.txt (manifest)
+ * - Andy.txt (manifest)
  * - bindings.xml (keybindings)
  * - LICENSE (license file)
  */
@@ -133,7 +133,7 @@ async function buildArchive() {
     const includedItems = [];
     const excludedItems = [];
     
-    // Add each item to the archive under the "AddonAnalyzer" directory
+    // Add each item to the archive under the "Andy" directory
     for (const item of items) {
       if (shouldInclude(item)) {
         const itemPath = path.join('.', item);
@@ -141,11 +141,11 @@ async function buildArchive() {
         
         if (stats.isDirectory()) {
           console.log(`  ✓ ${item}/ (directory)`);
-          archive.directory(itemPath, path.join('AddonAnalyzer', item));
+          archive.directory(itemPath, path.join('Andy', item));
           includedItems.push(item + '/');
         } else {
           console.log(`  ✓ ${item}`);
-          archive.file(itemPath, { name: path.join('AddonAnalyzer', item) });
+          archive.file(itemPath, { name: path.join('Andy', item) });
           includedItems.push(item);
         }
         includedCount++;
