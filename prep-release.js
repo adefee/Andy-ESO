@@ -100,8 +100,8 @@ ${colors.bright}Examples:${colors.reset}
 
 ${colors.bright}Files Updated:${colors.reset}
   - package.json
-  - AddonAnalyzer.txt (Version and AddOnVersion)
-  - variables.lua (version and versionESO)
+  - Andy.txt (Version and AddOnVersion)
+  - AndyVariables.lua (version and versionESO)
   - README.md (Current Branch Release)
 
 ${colors.bright}Notes:${colors.reset}
@@ -280,7 +280,7 @@ function pushToRemote(version) {
     
     log.info('');
     log.success('GitHub Actions will now build and create the release!');
-    log.info(`View workflow: https://github.com/YOUR_USERNAME/AddonAnalyzer-ESO/actions`);
+    log.info(`View workflow: https://github.com/adefee/Andy-ESO/actions`);
   } catch (error) {
     log.error('Failed to push to remote');
     throw error;
@@ -318,7 +318,7 @@ async function main() {
     process.exit(options.help ? 0 : 1);
   }
 
-  log.header('🎭 AddonAnalyzer ESO - Version Management');
+  log.header('🎭 Andy - ESO Addon Analyzer - Version Management');
   
   // Provide helpful feedback if running through npm incorrectly
   checkNpmUsage();
