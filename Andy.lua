@@ -18,7 +18,7 @@ local ANDY_SAVED_VARS_VERSION = 1
 -- debugLog()
 -- Helper; Outputs debug message to console if debug mode is enabled
 function Andy.debugLog(message)
-  if AddonAnalyzer and Andy.saved and Andy.saved.internal and Andy.saved.internal.showDebug and Andy.saved.internal.showDebug > 0 then
+  if Andy and Andy.saved and Andy.saved.internal and Andy.saved.internal.showDebug and Andy.saved.internal.showDebug > 0 then
     d('Andy: ' .. message)
   end
 end
@@ -150,7 +150,7 @@ function Andy.RuntimeOnLoad()
     > Auto scans
   ]]
   AndyUtil.runPeriodicEvents('scan', {
-    joke = function() Andy.quickScanAllAddons() end
+    scan = function() Andy.quickScanAllAddons() end
   })
 
   --[[
@@ -215,9 +215,6 @@ function Andy.Activated(e)
     if Andy.saved.internal and Andy.saved.internal.firstLoad > 0 then
       Andy.FirstRun()
     end
-
-    -- Run through any necessary updates
-    Andy.RuntimeUpdates()
 
     -- Run any necessary functions that should run each EVENT_PLAYER_ACTIVATED event.
     Andy.RuntimeOnActivated()

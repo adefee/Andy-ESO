@@ -153,7 +153,7 @@ end
 -- Data; Determines if a specific periodic event is due to occur
 function AndyUtil.runPeriodicEvents(target, callbacks, skipIncrement)
   if target == 'scan' then -- Periodically show a joke to the user
-    zo_callLater(function() return callbacks['joke']() end, 3000)
+    zo_callLater(function() return callbacks['scan']() end, 3000)
   end
 
   return false

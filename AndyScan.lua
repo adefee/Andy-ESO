@@ -142,7 +142,7 @@ end
 -- @param isManualScan (boolean, optional) - If true, bypass suppress settings and show all results
 function Andy.quickScanAllAddons(isManualScan)
   local currentPlatform = AndyUtil.getPlatform()
-  d('|cFF8800[Andy]|r Running manual scan platform: ' .. currentPlatform .. (isManualScan and ' (manual scan)' or ''))
+  d('|cFF8800[Andy]|r Scanning ' .. currentPlatform == 'console' and 'console' or 'PC' .. ' addons' .. (isManualScan and ' (manual scan)' or '') .. '...')
   
   -- Get all installed addons
   local installedAddons = Andy.getInstalledAddons()
