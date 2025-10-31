@@ -401,6 +401,18 @@
             background: var(--success);
         }
 
+        .watchlist-item.in-progress::before {
+            background: #2196F3;
+        }
+
+        .watchlist-item.needs-review::before {
+            background: var(--warning);
+        }
+
+        .watchlist-item.flagged::before {
+            background: var(--danger);
+        }
+
         .watchlist-item:hover {
             transform: translateX(4px);
             border-color: var(--primary);
@@ -903,7 +915,7 @@
             <nav id="navMenu">
                 <a href="#about">About</a>
                 <a href="#watchlist">Browse Flagged</a>
-                <a href="#audited">Safe Addons</a>
+                <a href="#audited">Audits</a>
                 <a href="#updates">Updates</a>
                 <a href="#coffee">Support</a>
                 <a href="#report">Report</a>
@@ -941,7 +953,7 @@
                 <div class="feature-card">
                     <span class="feature-icon">👥</span>
                     <h3>Community Driven</h3>
-                    <p>Our watchlist is maintained by the community. Help us keep ESO safe by reporting problematic addons.</p>
+                    <p>Our watchlist is maintained by community members. Help us keep ESO safe by reporting problematic addons.</p>
                 </div>
             </div>
 
@@ -990,23 +1002,30 @@
         </section>
 
         <section id="audited">
-            <h2>Audited Safe Addons</h2>
+            <h2>Addon Audits</h2>
             <p class="section-description">
-                These addons have been reviewed by the Andy team and verified as safe. Regular audits ensure continued safety.
+                Track the audit status of addons. Safe addons have been reviewed and verified. Others are in various stages of review.
             </p>
 
             <div class="filter-controls">
-                <button class="filter-toggle" id="auditFilterToggle" aria-label="Toggle audit filters">
+                <button class="filter-toggle" id="auditPlatformToggle" aria-label="Toggle platform filters">
                     <svg viewBox="0 0 24 24">
                         <path d="M10 18h4v-2h-4v2zM3 6v2h18V6H3zm3 7h12v-2H6v2z"/>
                     </svg>
                     Platform
                 </button>
-                <div class="filter-buttons" id="auditFilterButtons">
-                    <button class="filter-btn active" data-audit-filter="all">All Platforms</button>
-                    <button class="filter-btn" data-audit-filter="console">Console</button>
-                    <button class="filter-btn" data-audit-filter="pc">PC</button>
+                <div class="filter-buttons" id="auditPlatformButtons">
+                    <button class="filter-btn active" data-audit-platform="all">All Platforms</button>
+                    <button class="filter-btn" data-audit-platform="console">Console</button>
+                    <button class="filter-btn" data-audit-platform="pc">PC</button>
                 </div>
+                <select class="search-box" id="auditStatusSelect" style="flex: 0 0 auto; min-width: 200px;">
+                    <option value="safe">Safe Only</option>
+                    <option value="in-progress">In Progress</option>
+                    <option value="needs-review">Needs Review</option>
+                    <option value="flagged">Flagged</option>
+                    <option value="all">All Statuses</option>
+                </select>
                 <input type="text" class="search-box" id="auditSearchBox" placeholder="🔍 Search audited addons...">
             </div>
 
@@ -1083,15 +1102,16 @@
 
         // Audits data from audits directory (auto-updated by build script)
         const auditsData = {
-          "console": [
+          "console": [],
+          "pc": [
                     {
                               "addonName": "Joker",
-                              "author": "@CallMeLent",
+                              "author": "CallMeLent",
                               "platform": "pc",
                               "auditDate": "2025-10-31",
                               "lastVersionAudited": "8.6.5",
                               "outcome": "safe",
-                              "notes": "Joker offers an assortment of sillyness to brighten your day: jokes, trivial, rolls, custom ready check, and more. It's been around since 2019, and the addon is fully open-source. Everything works as describes, with no noted flags.",
+                              "notes": "Joker offers an assortment of sillyness to brighten your day: jokes, trivial, rolls, custom ready check, and more. It's been around since 2019, and the addon is fully open-source. Everything works as describes, with no noted flags. Disclaimer: The creator of Andy is also the creator of Joker, so there's a bit of a conflict of interest here - if someone else would like to independently audit Joker, please feel free!",
                               "auditor": "adefee",
                               "downloadSource": "https://github.com/adefee/Joker-ESO",
                               "categories": [
@@ -1099,8 +1119,7 @@
                                         "Chat"
                               ]
                     }
-          ],
-          "pc": []
+          ]
 };
 
         // Watchlist data from AndyWatchlist.lua (auto-updated by build script)
@@ -1357,7 +1376,7 @@
         renderUpdates();
 
         // Render audited safe addons
-        function renderAuditedAddons(platformFilter = 'all', searchTerm = '') {
+        function renderAuditedAddons(platformFilter = 'all', statusFilter = 'safe', searchTerm = '') {
             const grid = document.getElementById('auditedGrid');
             grid.innerHTML = '';
             
@@ -1374,6 +1393,11 @@
                 auditsData.pc.forEach(audit => {
                     items.push({ ...audit, platform: 'pc' });
                 });
+            }
+            
+            // Apply status filter
+            if (statusFilter !== 'all') {
+                items = items.filter(item => item.outcome === statusFilter);
             }
             
             // Apply search filter
@@ -1401,15 +1425,56 @@
             items.forEach(item => {
                 const platformDisplay = item.platform === 'console' ? 'Console' : 'PC';
                 
+                // Determine outcome styling and labels
+                let outcomeConfig = {};
+                switch(item.outcome) {
+                    case 'safe':
+                        outcomeConfig = {
+                            cssClass: 'safe',
+                            typeLabel: 'Safe',
+                            badgeStyle: 'background: rgba(76, 175, 80, 0.15); color: var(--success); border: 1px solid rgba(76, 175, 80, 0.3);',
+                            badgeText: '✅ Audited Safe'
+                        };
+                        break;
+                    case 'in-progress':
+                        outcomeConfig = {
+                            cssClass: 'in-progress',
+                            typeLabel: 'In Progress',
+                            badgeStyle: 'background: rgba(33, 150, 243, 0.15); color: #2196F3; border: 1px solid rgba(33, 150, 243, 0.3);',
+                            badgeText: '🔄 Audit In Progress'
+                        };
+                        break;
+                    case 'needs-review':
+                        outcomeConfig = {
+                            cssClass: 'needs-review',
+                            typeLabel: 'Needs Review',
+                            badgeStyle: 'background: rgba(255, 184, 77, 0.15); color: var(--warning); border: 1px solid rgba(255, 184, 77, 0.3);',
+                            badgeText: '📝 Needs Review'
+                        };
+                        break;
+                    case 'flagged':
+                        outcomeConfig = {
+                            cssClass: 'flagged',
+                            typeLabel: 'Flagged',
+                            badgeStyle: 'background: rgba(255, 68, 68, 0.15); color: var(--danger); border: 1px solid rgba(255, 68, 68, 0.3);',
+                            badgeText: '⚠️ Issues Found'
+                        };
+                        break;
+                    default:
+                        outcomeConfig = {
+                            cssClass: 'unknown',
+                            typeLabel: 'Unknown',
+                            badgeStyle: 'background: var(--bg-tertiary); color: var(--text-secondary); border: 1px solid var(--border);',
+                            badgeText: '❓ Unknown Status'
+                        };
+                }
+                
                 const card = document.createElement('div');
-                card.className = 'watchlist-item safe';
+                card.className = `watchlist-item ${outcomeConfig.cssClass}`;
                 card.innerHTML = `
                     <div class="watchlist-header">
                         <div class="watchlist-name">${item.addonName}</div>
-                        <div class="watchlist-type">Safe</div>
-                    </div>
-                    <div class="reason-badge" style="background: rgba(76, 175, 80, 0.15); color: var(--success); border: 1px solid rgba(76, 175, 80, 0.3);">
-                        ✅ Audited Safe
+                        <div class="watchlist-type" style="${outcomeConfig.badgeStyle}">${outcomeConfig.typeLabel}</div>
                     </div>
                     <div class="watchlist-description">${item.notes}</div>
                     <div class="watchlist-meta">
@@ -1419,15 +1484,17 @@
                         </div>
                         <div class="meta-item">
                             <span>📅</span>
-                            <span>Audited: ${item.auditDate}</span>
+                            <span>${item.outcome === 'safe' ? 'Audited' : 'Status Updated'}: ${item.auditDate}</span>
                         </div>
                         <div class="meta-item">
                             <span class="platform-badge">${platformDisplay}</span>
                         </div>
+                        ${item.lastVersionAudited ? `
                         <div class="meta-item">
                             <span>📦</span>
                             <span>v${item.lastVersionAudited}</span>
                         </div>
+                        ` : ''}
                         ${item.downloadSource ? `
                         <div class="meta-item">
                             <span>🔗</span>
@@ -1440,34 +1507,44 @@
             });
         }
 
-        // Audit filter toggle (mobile)
-        const auditFilterToggle = document.getElementById('auditFilterToggle');
-        const auditFilterButtons = document.getElementById('auditFilterButtons');
+        // Audit platform filter toggle (mobile)
+        const auditPlatformToggle = document.getElementById('auditPlatformToggle');
+        const auditPlatformButtons = document.getElementById('auditPlatformButtons');
         
-        auditFilterToggle.addEventListener('click', function() {
-            auditFilterButtons.classList.toggle('active');
+        auditPlatformToggle.addEventListener('click', function() {
+            auditPlatformButtons.classList.toggle('active');
         });
 
-        // Audit filter buttons
-        document.querySelectorAll('[data-audit-filter]').forEach(btn => {
+        // Audit platform filter buttons
+        document.querySelectorAll('[data-audit-platform]').forEach(btn => {
             btn.addEventListener('click', function() {
-                document.querySelectorAll('[data-audit-filter]').forEach(b => b.classList.remove('active'));
+                document.querySelectorAll('[data-audit-platform]').forEach(b => b.classList.remove('active'));
                 this.classList.add('active');
-                const filter = this.dataset.auditFilter;
+                const platformFilter = this.dataset.auditPlatform;
+                const statusFilter = document.getElementById('auditStatusSelect').value;
                 const searchTerm = document.getElementById('auditSearchBox').value;
-                renderAuditedAddons(filter, searchTerm);
+                renderAuditedAddons(platformFilter, statusFilter, searchTerm);
                 
                 // Close filter dropdown on mobile after selection
                 if (window.innerWidth <= 968) {
-                    auditFilterButtons.classList.remove('active');
+                    auditPlatformButtons.classList.remove('active');
                 }
             });
         });
 
+        // Audit status dropdown
+        document.getElementById('auditStatusSelect').addEventListener('change', function() {
+            const platformFilter = document.querySelector('[data-audit-platform].active').dataset.auditPlatform;
+            const statusFilter = this.value;
+            const searchTerm = document.getElementById('auditSearchBox').value;
+            renderAuditedAddons(platformFilter, statusFilter, searchTerm);
+        });
+
         // Audit search box
         document.getElementById('auditSearchBox').addEventListener('input', function() {
-            const activeFilter = document.querySelector('[data-audit-filter].active').dataset.auditFilter;
-            renderAuditedAddons(activeFilter, this.value);
+            const platformFilter = document.querySelector('[data-audit-platform].active').dataset.auditPlatform;
+            const statusFilter = document.getElementById('auditStatusSelect').value;
+            renderAuditedAddons(platformFilter, statusFilter, this.value);
         });
 
         renderAuditedAddons();

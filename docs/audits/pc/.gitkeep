@@ -1,5 +1,14 @@
 # PC Audits Directory
 
-This directory contains audit files for PC addons that have been reviewed and deemed safe.
+This directory contains audit files for PC addons that are being tracked.
 
+## File Naming
 Each file should be named `addon-name.json` where `addon-name` matches the addon's name (lowercase, spaces replaced with hyphens).
+
+## Outcome Values
+- **"safe"** - Addon has been audited and verified as safe (displayed with green ✅ badge)
+- **"in-progress"** - Audit is currently being conducted (displayed with blue 🔄 badge)
+- **"needs-review"** - Addon is queued for audit but not yet started (displayed with yellow 📝 badge)
+- **"flagged"** - Issues found (displayed with red ⚠️ badge - should also be in AndyWatchlist.lua)
+
+All audit statuses are displayed on the public site with appropriate visual indicators.
