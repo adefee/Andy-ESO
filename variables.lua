@@ -40,8 +40,8 @@ AddonAnalyzer = {
     },
     ignore = {
       enabled = false, -- If true, suppress warnings until new addon found or version updated
-      versionWhenIgnored = nil, -- Andy version when ignore was set
-      flaggedAddons = {} -- List of addon names that were flagged when ignore was set
+      versionWhenIgnored = nil, -- Andy version when suppress was set
+      flaggedAddons = {} -- List of addon names that were flagged when suppress was set
     },
     seenWatchlistAddons = { -- ANDY History: User's installed addons that have been flagged in the past
     }

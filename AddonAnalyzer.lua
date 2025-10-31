@@ -47,9 +47,9 @@ function Andy.ScanCommand()
   Andy.quickScanAllAddons()
 end
 
--- IgnoreCommand()
--- Slash command handler for /andy ignore
-function Andy.IgnoreCommand()
+-- SuppressCommand()
+-- Slash command handler for /andy suppress
+function Andy.SuppressCommand()
   if not Andy.saved or not Andy.saved.ignore then
     d('Andy: Error - saved variables not initialized yet.')
     return
@@ -59,7 +59,7 @@ function Andy.IgnoreCommand()
   local flaggedAddons = Andy.quickScanAllAddons()
   
   if #flaggedAddons == 0 then
-    d('|cFF8800[AddonAnalyzer]|r No flagged addons found. Nothing to ignore.')
+    d('|cFF8800[AddonAnalyzer]|r No flagged addons found. Nothing to suppress.')
     return
   end
   
@@ -72,8 +72,8 @@ function Andy.IgnoreCommand()
     table.insert(Andy.saved.ignore.flaggedAddons, result.addonName)
   end
   
-  d('|cFF8800[AddonAnalyzer]|r Ignoring ' .. #flaggedAddons .. ' flagged addon(s). Warnings will be suppressed until a new flagged addon is detected or AddonAnalyzer is updated.')
-  Andy.debugLog('Ignored addons: ' .. table.concat(Andy.saved.ignore.flaggedAddons, ', '))
+  d('|cFF8800[AddonAnalyzer]|r Suppressing warnings for ' .. #flaggedAddons .. ' flagged addon(s). Warnings will be suppressed until a new flagged addon is detected or AddonAnalyzer is updated.')
+  Andy.debugLog('Suppressed addons: ' .. table.concat(Andy.saved.ignore.flaggedAddons, ', '))
 end
 
 -- MonitorCommand()
@@ -89,7 +89,7 @@ function Andy.MonitorCommand()
     return
   end
   
-  -- Clear ignore state
+  -- Clear suppress state
   Andy.saved.ignore.enabled = false
   Andy.saved.ignore.versionWhenIgnored = nil
   Andy.saved.ignore.flaggedAddons = {}
@@ -159,15 +159,15 @@ function Andy.RuntimeOnLoad()
       Andy.ScanCommand()
     elseif command == "debug" then
       Andy.ToggleDebug()
-    elseif command == "ignore" then
-      Andy.IgnoreCommand()
+    elseif command == "suppress" then
+      Andy.SuppressCommand()
     elseif command == "monitor" then
       Andy.MonitorCommand()
     else
       d('|cFF8800[AddonAnalyzer]|r Available commands:')
       d('  |cFFFFFF/andy scan|r - Manually scan for flagged addons')
-      d('  |cFFFFFF/andy ignore|r - Ignore current warnings until new addon found or addon updated')
-      d('  |cFFFFFF/andy monitor|r - Re-enable warnings (undo ignore)')
+      d('  |cFFFFFF/andy suppress|r - Suppress current warnings until new addon found or addon updated')
+      d('  |cFFFFFF/andy monitor|r - Re-enable warnings (undo suppress)')
     end
   end
 end

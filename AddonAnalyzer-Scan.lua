@@ -156,13 +156,13 @@ function Andy.quickScanAllAddons()
     end
   end
   
-  -- Check if we should suppress warnings based on ignore settings
+  -- Check if we should suppress warnings based on suppress settings
   local shouldShowWarnings = true
   local newAddonsFound = {}
   local versionChanged = false
   
   if Andy.saved and Andy.saved.ignore and Andy.saved.ignore.enabled then
-    Andy.debugLog('Ignore mode is enabled, checking for new addons or version changes...')
+    Andy.debugLog('Suppress mode is enabled, checking for new addons or version changes...')
     
     -- Check if version has changed
     if Andy.saved.ignore.versionWhenIgnored and Andy.versionESO ~= Andy.saved.ignore.versionWhenIgnored then
@@ -188,7 +188,7 @@ function Andy.quickScanAllAddons()
     -- Determine if we should show warnings
     if #newAddonsFound == 0 and not versionChanged then
       shouldShowWarnings = false
-      Andy.debugLog('No new addons found and version unchanged. Suppressing warnings.')
+      Andy.debugLog('No new addons found and version unchanged. Warnings suppressed.')
     else
       -- Auto re-enable monitoring if version changed or new addons found
       Andy.saved.ignore.enabled = false
@@ -198,7 +198,7 @@ function Andy.quickScanAllAddons()
   
   -- Log results to chat
   if #flaggedAddons > 0 and shouldShowWarnings then
-    -- Show reason for alert if coming out of ignore mode
+    -- Show reason for alert if coming out of suppress mode
     if #newAddonsFound > 0 or versionChanged then
       local reasons = {}
       if #newAddonsFound > 0 then
@@ -239,9 +239,9 @@ function Andy.quickScanAllAddons()
     end
     
     d('|cFFFF00Please review these addons and consider removing them.|r')
-    d('|cAAAAAATip: Use |cFFFFFF/andy ignore|r to suppress warnings until a new flagged addon is detected.|r')
+    d('|cAAAAAATip: Use |cFFFFFF/andy suppress|r to suppress warnings until a new flagged addon is detected.|r')
   elseif #flaggedAddons > 0 and not shouldShowWarnings then
-    Andy.debugLog('Warnings suppressed due to ignore mode.')
+    Andy.debugLog('Warnings suppressed due to suppress mode.')
   else
     Andy.debugLog('No flagged addons found - all clear!')
   end
