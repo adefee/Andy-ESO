@@ -12,7 +12,7 @@
 ]]--
 
 Andy = Andy or {}
-local AndyUtil = AndyUtil or {}
+local AndyUtil = AndyUtilityFn or {}
 
 -- getInstalledAddons()
 -- Get a list of installed addons
@@ -141,9 +141,7 @@ end
 -- Called on UI load, gets list of addons and scans each against AddonWatchlistDb
 -- @param isManualScan (boolean, optional) - If true, bypass suppress settings and show all results
 function Andy.quickScanAllAddons(isManualScan)
-  local currentPlatform = AndyUtil.getPlatform()
-  d('|cFF8800[Andy]|r Scanning ' .. currentPlatform == 'console' and 'console' or 'PC' .. ' addons' .. (isManualScan and ' (manual scan)' or '') .. '...')
-  
+    
   -- Get all installed addons
   local installedAddons = Andy.getInstalledAddons()
   local flaggedAddons = {}
@@ -270,4 +268,4 @@ function Andy.quickScanAllAddons(isManualScan)
   return flaggedAddons
 end
 
-Andy = Andy or {}
+AddonAnalyzer = Andy or {}
