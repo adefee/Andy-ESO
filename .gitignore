@@ -17,3 +17,8 @@ desktop.ini
 
 node_modules/
 dist/
+
+# Auth
+session.json
+credentials.json
+*.env
