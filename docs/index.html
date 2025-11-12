@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Andy - ESO Addon Analyzer</title>
     <meta name="description" content="An Elder Scrolls Online addon that helps protect the community by identifying malicious, stolen, paywalled, or ToS/EULA-violating addons.">
+    <base href="https://addonanalyzer.com/">
+    <link rel="canonical" href="https://addonanalyzer.com/">
     <style>
         :root {
             --primary: #FF8800;
@@ -919,6 +921,138 @@
         ::-webkit-scrollbar-thumb:hover {
             background: var(--primary);
         }
+
+        /* Screenshot Carousel */
+        .carousel-container {
+            position: relative;
+            max-width: 900px;
+            margin: 0 auto 3rem;
+            overflow: hidden;
+            border-radius: var(--radius-lg);
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .carousel-wrapper {
+            position: relative;
+            width: 100%;
+            padding-bottom: 56.25%; /* 16:9 aspect ratio */
+        }
+
+        .carousel-slides {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            transition: transform 0.5s ease-in-out;
+        }
+
+        .carousel-slide {
+            min-width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+        }
+
+        .carousel-slide img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+            border-radius: var(--radius-sm);
+        }
+
+        .carousel-button {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(255, 136, 0, 0.9);
+            color: #fff;
+            border: none;
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+            z-index: 10;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        }
+
+        .carousel-button:hover {
+            background: var(--primary-hover);
+            transform: translateY(-50%) scale(1.1);
+        }
+
+        .carousel-button.prev {
+            left: 1rem;
+        }
+
+        .carousel-button.next {
+            right: 1rem;
+        }
+
+        .carousel-button svg {
+            width: 24px;
+            height: 24px;
+            fill: currentColor;
+        }
+
+        .carousel-dots {
+            display: flex;
+            justify-content: center;
+            gap: 0.75rem;
+            padding: 1.25rem;
+            background: var(--bg-secondary);
+            border-top: 1px solid var(--border);
+        }
+
+        .carousel-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: var(--bg-tertiary);
+            border: 2px solid var(--border);
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .carousel-dot:hover {
+            background: var(--text-muted);
+            transform: scale(1.2);
+        }
+
+        .carousel-dot.active {
+            background: var(--primary);
+            border-color: var(--primary);
+            transform: scale(1.3);
+        }
+
+        @media (max-width: 640px) {
+            .carousel-button {
+                width: 40px;
+                height: 40px;
+            }
+
+            .carousel-button svg {
+                width: 20px;
+                height: 20px;
+            }
+
+            .carousel-button.prev {
+                left: 0.5rem;
+            }
+
+            .carousel-button.next {
+                right: 0.5rem;
+            }
+        }
     </style>
 </head>
 <body>
@@ -942,8 +1076,9 @@
             </button>
             <nav id="navMenu">
                 <a href="https://github.com/adefee/Andy-ESO/releases" target="_blank">Download</a>
+                <a href="#screenshots">Screenshots</a>
                 <a href="#about">About</a>
-                <a href="#watchlist">Browse Flagged</a>
+                <a href="#watchlist">Browse</a>
                 <a href="#audited">Audits</a>
                 <a href="#updates">Updates</a>
                 <a href="#coffee">Support</a>
@@ -954,6 +1089,45 @@
     </header>
 
     <main>
+        <section id="screenshots">
+            <h2>Screenshots</h2>
+            <p class="section-description">
+                See Andy in action! Browse through these screenshots to get a preview of how Andy protects your game.
+            </p>
+            
+            <div class="carousel-container">
+                <div class="carousel-wrapper">
+                    <div class="carousel-slides" id="carouselSlides">
+                        <div class="carousel-slide">
+                            <img src="screenshots/andy-commands.png" alt="Andy Commands - View all available commands">
+                        </div>
+                        <div class="carousel-slide">
+                            <img src="screenshots/andy-found.png" alt="Andy Found Flagged Addon - Alert notification">
+                        </div>
+                        <div class="carousel-slide">
+                            <img src="screenshots/andy-safe.png" alt="Andy Safe - No issues detected">
+                        </div>
+                    </div>
+                </div>
+                
+                <button class="carousel-button prev" id="carouselPrev" aria-label="Previous screenshot">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/>
+                    </svg>
+                </button>
+                
+                <button class="carousel-button next" id="carouselNext" aria-label="Next screenshot">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/>
+                    </svg>
+                </button>
+                
+                <div class="carousel-dots" id="carouselDots">
+                    <!-- Dots will be generated by JavaScript -->
+                </div>
+            </div>
+        </section>
+
         <section id="about">
             <h2>About Andy</h2>
             <p class="section-description">
@@ -1590,6 +1764,109 @@
         });
 
         renderAuditedAddons();
+
+        // Carousel functionality
+        (function() {
+            const slides = document.getElementById('carouselSlides');
+            const prevBtn = document.getElementById('carouselPrev');
+            const nextBtn = document.getElementById('carouselNext');
+            const dotsContainer = document.getElementById('carouselDots');
+            const totalSlides = slides.children.length;
+            let currentSlide = 0;
+            let autoPlayInterval;
+
+            // Generate dots
+            for (let i = 0; i < totalSlides; i++) {
+                const dot = document.createElement('button');
+                dot.className = 'carousel-dot';
+                if (i === 0) dot.classList.add('active');
+                dot.setAttribute('aria-label', `Go to screenshot ${i + 1}`);
+                dot.addEventListener('click', () => goToSlide(i));
+                dotsContainer.appendChild(dot);
+            }
+
+            const dots = dotsContainer.querySelectorAll('.carousel-dot');
+
+            function updateCarousel() {
+                slides.style.transform = `translateX(-${currentSlide * 100}%)`;
+                
+                // Update dots
+                dots.forEach((dot, index) => {
+                    dot.classList.toggle('active', index === currentSlide);
+                });
+            }
+
+            function goToSlide(index) {
+                currentSlide = index;
+                updateCarousel();
+                resetAutoPlay();
+            }
+
+            function nextSlide() {
+                currentSlide = (currentSlide + 1) % totalSlides;
+                updateCarousel();
+                resetAutoPlay();
+            }
+
+            function prevSlide() {
+                currentSlide = (currentSlide - 1 + totalSlides) % totalSlides;
+                updateCarousel();
+                resetAutoPlay();
+            }
+
+            function startAutoPlay() {
+                autoPlayInterval = setInterval(nextSlide, 5000);
+            }
+
+            function stopAutoPlay() {
+                clearInterval(autoPlayInterval);
+            }
+
+            function resetAutoPlay() {
+                stopAutoPlay();
+                startAutoPlay();
+            }
+
+            // Event listeners
+            nextBtn.addEventListener('click', nextSlide);
+            prevBtn.addEventListener('click', prevSlide);
+
+            // Keyboard navigation
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'ArrowLeft') prevSlide();
+                if (e.key === 'ArrowRight') nextSlide();
+            });
+
+            // Touch swipe support
+            let touchStartX = 0;
+            let touchEndX = 0;
+
+            slides.addEventListener('touchstart', function(e) {
+                touchStartX = e.changedTouches[0].screenX;
+            }, { passive: true });
+
+            slides.addEventListener('touchend', function(e) {
+                touchEndX = e.changedTouches[0].screenX;
+                handleSwipe();
+            }, { passive: true });
+
+            function handleSwipe() {
+                const swipeThreshold = 50;
+                if (touchStartX - touchEndX > swipeThreshold) {
+                    nextSlide();
+                } else if (touchEndX - touchStartX > swipeThreshold) {
+                    prevSlide();
+                }
+            }
+
+            // Pause autoplay on hover
+            const carouselContainer = document.querySelector('.carousel-container');
+            carouselContainer.addEventListener('mouseenter', stopAutoPlay);
+            carouselContainer.addEventListener('mouseleave', startAutoPlay);
+
+            // Start autoplay
+            startAutoPlay();
+        })();
 
         // Smooth scroll for navigation
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
