@@ -321,7 +321,7 @@
             font-size: 1.1rem;
             transition: all 0.3s ease;
             box-shadow: 0 4px 12px rgba(255, 136, 0, 0.3);
-            margin-bottom: 2rem;
+            white-space: nowrap;
         }
 
         .download-button:hover {
@@ -854,6 +854,19 @@
                 font-size: 1.75rem;
             }
 
+            .download-showcase {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+
+            .download-actions {
+                padding-top: 0;
+            }
+
+            .carousel-container {
+                max-width: 100%;
+            }
+
             .filter-toggle {
                 display: flex;
                 width: 100%;
@@ -922,11 +935,79 @@
             background: var(--primary);
         }
 
+        /* Download Showcase Section */
+        .download-showcase {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            align-items: start;
+            margin-bottom: 3rem;
+        }
+
+        .download-actions {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+            padding-top: 0.5rem;
+            justify-content: flex-start;
+            align-items: flex-start;
+        }
+
+        .download-cta h3 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .download-cta p {
+            font-size: 1rem;
+            color: var(--text-secondary);
+            line-height: 1.6;
+            margin: 0;
+        }
+
+        .download-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .platform-icons {
+            display: flex;
+            gap: 0.5rem;
+            align-items: center;
+        }
+
+        .platform-icon {
+            width: 24px;
+            height: 24px;
+            fill: var(--text-secondary);
+            transition: fill 0.2s;
+        }
+
+        .download-item:hover .platform-icon {
+            fill: var(--primary);
+        }
+
+        .download-button[aria-disabled="true"] {
+            opacity: 0.5;
+            cursor: not-allowed;
+            pointer-events: none;
+        }
+
+        .download-item.disabled .platform-icon {
+            fill: var(--text-muted);
+        }
+
+        .download-item.disabled:hover .platform-icon {
+            fill: var(--text-muted);
+        }
+
         /* Screenshot Carousel */
         .carousel-container {
             position: relative;
-            max-width: 900px;
-            margin: 0 auto 3rem;
+            width: 100%;
             overflow: hidden;
             border-radius: var(--radius-lg);
             background: var(--bg-card);
@@ -1076,7 +1157,6 @@
             </button>
             <nav id="navMenu">
                 <a href="https://github.com/adefee/Andy-ESO/releases" target="_blank">Download</a>
-                <a href="#screenshots">Screenshots</a>
                 <a href="#about">About</a>
                 <a href="#watchlist">Browse</a>
                 <a href="#audited">Audits</a>
@@ -1089,57 +1169,90 @@
     </header>
 
     <main>
-        <section id="screenshots">
-            <h2>Screenshots</h2>
-            <p class="section-description">
-                See Andy in action! Browse through these screenshots to get a preview of how Andy protects your game.
-            </p>
-            
-            <div class="carousel-container">
-                <div class="carousel-wrapper">
-                    <div class="carousel-slides" id="carouselSlides">
-                        <div class="carousel-slide">
-                            <img src="screenshots/andy-commands.png" alt="Andy Commands - View all available commands">
-                        </div>
-                        <div class="carousel-slide">
-                            <img src="screenshots/andy-found.png" alt="Andy Found Flagged Addon - Alert notification">
-                        </div>
-                        <div class="carousel-slide">
-                            <img src="screenshots/andy-safe.png" alt="Andy Safe - No issues detected">
-                        </div>
-                    </div>
-                </div>
-                
-                <button class="carousel-button prev" id="carouselPrev" aria-label="Previous screenshot">
-                    <svg viewBox="0 0 24 24">
-                        <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/>
-                    </svg>
-                </button>
-                
-                <button class="carousel-button next" id="carouselNext" aria-label="Next screenshot">
-                    <svg viewBox="0 0 24 24">
-                        <path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/>
-                    </svg>
-                </button>
-                
-                <div class="carousel-dots" id="carouselDots">
-                    <!-- Dots will be generated by JavaScript -->
-                </div>
-            </div>
-        </section>
-
         <section id="about">
             <h2>About Andy</h2>
             <p class="section-description">
                 Andy (Addon Analyzer) is an Elder Scrolls Online addon that helps protect the community by identifying malicious, stolen, paywalled, or ToS/EULA-violating addons. It monitors your installed addons and alerts you if any match our watchlist of flagged content.
             </p>
             
-            <a href="https://www.esoui.com/downloads/info4293-Andy-Checksaddonsforknownmaliciousstolenandotherflaggedcontent.html" target="_blank" rel="noopener noreferrer" class="download-button">
-                <svg viewBox="0 0 24 24">
-                    <path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/>
-                </svg>
-                Download from ESOUI
-            </a>
+            <div class="download-showcase">
+                <div class="download-actions">
+                    <div class="download-cta">
+                        <h3>Get Started</h3>
+                        <p>Andy is available for download via ESOUI and ESO addon managers (like Minion). A version for console is being actively developed and will be available soon.</p>
+                    </div>
+                    
+                    <div class="download-item">
+                        <div class="platform-icons">
+                            <!-- Windows Icon -->
+                            <svg class="platform-icon" viewBox="0 0 24 24" aria-label="Windows">
+                                <path d="M0 3.449L9.75 2.1v9.451H0m10.949-9.602L24 0v11.4H10.949M0 12.6h9.75v9.451L0 20.699M10.949 12.6H24V24l-12.9-1.801"/>
+                            </svg>
+                            <!-- Mac Icon -->
+                            <svg class="platform-icon" viewBox="0 0 24 24" aria-label="Mac">
+                                <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/>
+                            </svg>
+                        </div>
+                        <a href="https://www.esoui.com/downloads/info4293-Andy-Checksaddonsforknownmaliciousstolenandotherflaggedcontent.html" target="_blank" rel="noopener noreferrer" class="download-button">
+                            <svg viewBox="0 0 24 24">
+                                <path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/>
+                            </svg>
+                            Download from ESOUI or via Minion
+                        </a>
+                    </div>
+                    
+                    <div class="download-item disabled">
+                        <div class="platform-icons">
+                            <!-- PlayStation Icon -->
+                            <svg class="platform-icon" viewBox="0 0 24 24" aria-label="PlayStation">
+                                <path d="M8.984 2.596v17.547l3.915 1.261V6.688c0-.69.304-1.151.794-.991.636.181.76.814.76 1.505v5.875c2.441 1.193 4.362-.002 4.362-3.153 0-3.237-1.126-4.675-4.438-5.827-1.307-.448-3.728-1.186-5.39-1.502h-.003zm4.656 16.241l6.296-2.275c.715-.258.826-.625.246-.818-.586-.192-1.637-.139-2.357.123l-4.205 1.5-.002-2.244 4.394-1.512c.764-.241 1.365-.389 2.064-.207 1.018.267 1.638.922 1.723 1.802.09.891-.49 1.608-1.723 2.03l-6.428 2.289-.008-2.688zm-9.772 2.265l1.439-.429c.51-.145.912-.374.912-.753 0-.379-.402-.542-.912-.543H0v3.085l3.868-.884v-1.476z"/>
+                            </svg>
+                            <!-- Xbox Icon -->
+                            <svg class="platform-icon" viewBox="0 0 24 24" aria-label="Xbox">
+                                <path d="M4.102 21.033A11.947 11.947 0 0012 24a11.96 11.96 0 007.902-2.967c1.877-1.912-4.316-8.709-7.902-11.417-3.582 2.708-9.779 9.505-7.898 11.417zm11.16-14.406c2.5 2.961 7.484 10.313 6.076 12.912A11.942 11.942 0 0024 12.004a11.95 11.95 0 00-3.57-8.536 10.325 10.325 0 00-5.168 3.159zM12 0C9.98 0 8.06.511 6.366 1.41c1.609 1.21 4.298 3.488 5.634 5.054 1.336-1.567 4.025-3.846 5.634-5.054A11.946 11.946 0 0012 0zM2.661 19.542c-1.406-2.6 3.579-9.951 6.08-12.912-2.072-1.961-4.645-3.158-5.17-3.159A11.952 11.952 0 000 12.003c0 2.882.99 5.557 2.661 7.54z"/>
+                            </svg>
+                        </div>
+                        <a href="#" class="download-button" aria-disabled="true">
+                            <svg viewBox="0 0 24 24">
+                                <path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/>
+                            </svg>
+                            Download from Bethesda.net (soon!)
+                        </a>
+                    </div>
+                </div>
+                
+                <div class="carousel-container">
+                    <div class="carousel-wrapper">
+                        <div class="carousel-slides" id="carouselSlides">
+                            <div class="carousel-slide">
+                                <img src="screenshots/andy-commands.png" alt="Andy Commands - View all available commands">
+                            </div>
+                            <div class="carousel-slide">
+                                <img src="screenshots/andy-found.png" alt="Andy Found Flagged Addon - Alert notification">
+                            </div>
+                            <div class="carousel-slide">
+                                <img src="screenshots/andy-safe.png" alt="Andy Safe - No issues detected">
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <button class="carousel-button prev" id="carouselPrev" aria-label="Previous screenshot">
+                        <svg viewBox="0 0 24 24">
+                            <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/>
+                        </svg>
+                    </button>
+                    
+                    <button class="carousel-button next" id="carouselNext" aria-label="Next screenshot">
+                        <svg viewBox="0 0 24 24">
+                            <path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/>
+                        </svg>
+                    </button>
+                    
+                    <div class="carousel-dots" id="carouselDots">
+                        <!-- Dots will be generated by JavaScript -->
+                    </div>
+                </div>
+            </div>
             
             <div class="feature-grid">
                 <div class="feature-card">
