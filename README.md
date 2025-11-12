@@ -64,7 +64,7 @@ Andy.AuthorWatchlistDb["AuthorName"] = {
 
 ## Website
 
-Visit our [GitHub Pages site](https://adefee.github.io/Andy-ESO/) to:
+Visit our [GitHub Pages site](https://addonanalyzer.com) to:
 - Learn more about the addon
 - Browse the current watchlist of flagged addons and authors
 - Report problematic addons
@@ -73,7 +73,7 @@ The website automatically updates whenever changes are pushed to `AndyWatchlist.
 
 ## Installation
 
-1. Download directly from the [releases page](https://github.com/adefee/Andy-ESO/releases) or clone this repository. If you download from the releases page, you'll need to extract the release zip.
+1. Download directly from the [releases page](https://github.com/adefee/Andy-ESO/releases), from [Bethesda.net](https://mods.bethesda.net/en/elderscrollsonline/details/0495e6ed-49a8-4a03-b529-048fbc4b758a/AddonAnalyzer__ANDY____Checks_for_malicious__stole), from [ESOUI](https://www.esoui.com/downloads/info4293-Andy-Checksaddonsforknownmaliciousstolenandotherflaggedcontent.html), from [Minion](https://minion.mmoui.com), or clone this repository. If you download from the releases page, you'll need to extract the release zip.
 2. Place the `Andy` folder in your ESO addons directory:
    - **PC**: `Documents/Elder Scrolls Online/live/AddOns/`
    - **PTS**: `Documents/Elder Scrolls Online/pts/AddOns/`
@@ -96,8 +96,9 @@ Note that submissions without sufficient evidence will be rejected, and multiple
 
 When updating `AndyWatchlist.lua`:
 1. Add entries directly to the file
-2. Test locally with `npm run update-docs` to preview the website changes
+2. Test locally with `npm run update-docs` to preview the website changes and ensure the list updates as expected
 3. PR to main - the GitHub Pages site will automatically update once the PR is merged
+4. Run `npm run prep-release -- <version> --push` to create a new release and tag
 
 ## Version
 
